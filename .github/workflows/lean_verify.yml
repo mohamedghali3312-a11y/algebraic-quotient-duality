@@ -1,0 +1,17 @@
+name: Certification Formelle Lean 4
+
+on: [push, pull_request]
+
+jobs:
+  verify-lean:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Vérification des Théorèmes Algébriques
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release download -R leanprover/lean4 -p "*linux.tar.zst"
+          tar --zstd -xf lean-*-linux.tar.zst
+          ./lean-*-linux/bin/lean theorems/UnifiedAlgebraicDuality.lean
