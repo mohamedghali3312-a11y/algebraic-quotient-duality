@@ -81,7 +81,7 @@ theorem bezoutImpliesUnitMod
     IsUnitMod oneQ π q := by
   refine ⟨π.toFun u, ?_⟩
   have h_proj : π.toFun (u * q + v * b) = π.toFun oneR := by rw [h_bezout]
-  rw [π.map_add, π.map_mul, π.map_mul, h_b_ker, h_zero_mul, h_add_zero, h_one] at h_proj
+  rw [π.map_add, π.map_mul, π.map_mul, h_b_ker, h_mul_comm (π.toFun v) zeroQ, h_zero_mul, h_add_zero, h_one] at h_proj
   rw [h_mul_comm]
   exact h_proj
 
