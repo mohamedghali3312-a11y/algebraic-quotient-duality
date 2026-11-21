@@ -124,8 +124,12 @@ theorem natModularTranslationInstantiation (m : Nat) (hm : 0 < m) (x k : Nat)
 --             ET D'INJECTIVITÉ DE L'OPÉRATEUR QUOTIENT
 -- ============================================================================
 
--- 6. Invariance idéale des puissances (monômes X^n) :
--- Si π(k) = 0, alors pour tout exposant n, π((x + k)^n) = π(x^n).
+def ringPow {R : Type} [Mul R] (x : R) : Nat → R
+  | 0 => x
+  | n + 1 => ringPow x n * x
+
+-- 6. Invariance idéale des puissances (monômes X^(n+1)) :
+-- Si π(k) = 0, alors pour tout exposant, π((x + k)^(n+1)) = π(x^(n+1)).
 theorem abstractMonomialTranslationInvariance
     {R Q : Type} [Add R] [Mul R] [Add Q] [Mul Q]
     (zeroQ : Q)
@@ -133,18 +137,15 @@ theorem abstractMonomialTranslationInvariance
     (π : RingProj R Q)
     (x k : R)
     (h_ker : InKernel zeroQ π k) :
-    ∀ n : Nat, π.toFun ((x + k) ^ (n + 1)) = π.toFun (x ^ (n + 1)) := by
+    ∀ n : Nat, π.toFun (ringPow (x + k) n) = π.toFun (ringPow x n) := by
   intro n
-  induction n with
-  | zero =>
-    simp only [Nat.pow_one]
+  have h_base : π.toFun (x + k) = π.toFun x := by
     rw [π.map_add, h_ker, h_add_zero]
+  induction n with
+  | zero => exact h_base
   | succ m ih =>
-    rw [Nat.pow_succ, Nat.pow_succ, π.map_mul, π.map_mul, ih]
-    have h_base : π.toFun (x + k) = π.toFun x := by
-      rw [π.map_add, h_ker, h_add_zero]
-    rw [h_base]
-
+    dsimp only [ringPow]
+    rw [π.map_mul, π.map_mul, ih, h_base]
 -- 7. Surjectivité du Théorème des Restes Chinois abstrait :
 -- Si e1, e2 sont des idempotents orthogonaux modulo (π1, π2)
 -- (i.e. π1(e1) = 1, π1(e2) = 0 et π2(e1) = 0, π2(e2) = 1),
