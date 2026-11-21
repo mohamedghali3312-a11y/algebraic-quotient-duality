@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "Si vous utilisez cette théorie ou les démonstrations Lean 4 dans vos travaux, veuillez citer ce dépôt comme suit :"
+type: software
+title: "Algebraic-Quotient-Duality : Invariance Profinie, Dualité Quotient-Bézout et Régularisation Spectrale"
+version: 1.0.0
+date-released: 2026-11-21
+license: MIT
+authors:
+  - family-names: "Ghali"
+    given-names: "Mohamed"
+keywords:
+  - "commutative algebra"
+  - "profinite completion"
+  - "haar measure"
+  - "chinese remainder theorem"
+  - "lean4"
+  - "spectral regularization"
+abstract: "Cadre unifié d'algèbre commutative et de topologie profinie reliant l'invariance modulaire des systèmes polynomiaux sur les anneaux principaux à la dualité Quotient-Bézout et à la régularisation spectrale des facteurs quadratiques, certifié en Lean 4 pur."
