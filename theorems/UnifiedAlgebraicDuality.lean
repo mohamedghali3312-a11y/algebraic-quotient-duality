@@ -11,7 +11,6 @@ def InKernel {R Q : Type} [Add R] [Mul R] [Add Q] [Mul Q] (zeroQ : Q)
     (π : RingProj R Q) (k : R) : Prop :=
   π.toFun k = zeroQ
 
--- 1. Invariance par translation idéale : x ∈ (R/I)^× et k ∈ I => x + k ∈ (R/I)^×
 theorem abstractIdealTranslationInvariance
     {R Q : Type} [Add R] [Mul R] [Add Q] [Mul Q]
     (zeroQ oneQ : Q)
@@ -25,7 +24,6 @@ theorem abstractIdealTranslationInvariance
   refine ⟨u, ?_⟩
   rw [π.map_add, h_ker, h_add_zero, hu]
 
--- 2. Compatibilité projective sur la tour R → Q_s → Q_r
 theorem abstractProjectiveTowerLift
     {R Qs Qr : Type} [Add R] [Mul R] [Add Qs] [Mul Qs] [Add Qr] [Mul Qr]
     (oneQs : Qs) (oneQr : Qr)
@@ -40,7 +38,6 @@ theorem abstractProjectiveTowerLift
   refine ⟨φ.toFun u_s, ?_⟩
   rw [h_comm, ← φ.map_mul, hu_s, h_one]
 
--- 3. Multiplicativité des éléments inversibles modulo I
 theorem abstractUnitModMul
     {R Q : Type} [Add R] [Mul R] [Add Q] [Mul Q]
     (oneQ : Q)
@@ -65,7 +62,6 @@ theorem abstractUnitModMul
         ← h_mul_assoc (π.toFun x) ux (π.toFun y * uy)]
   rw [h1, hux, huy, h_one_mul]
 
--- 4. Dualité de Bézout : U * Q + V * B = 1 => Q mod (B) est inversible
 theorem bezoutImpliesUnitMod
     {R Q : Type} [Add R] [Mul R] [Add Q] [Mul Q]
     (zeroQ oneQ : Q)
@@ -85,14 +81,10 @@ theorem bezoutImpliesUnitMod
   rw [h_mul_comm]
   exact h_proj
 
--- 5. Minoration spectrale sur le cône symétrique : (λ1 + μ)(λ2 + μ) ≥ μ^2
 theorem spectralRegularizationDetBound (lam1 lam2 mu : Nat) :
     mu * mu ≤ (lam1 + mu) * (lam2 + mu) := by
   rw [Nat.add_mul, Nat.mul_add, Nat.mul_add]
   omega
--- ============================================================================
--- SECTION 2 : INSTANCIATION CONCRÈTE SUR L'ANNEAU QUOTIENT ℤ / mℤ (m > 0)
--- ============================================================================
 
 structure ZModPos (m : Nat) where
   val : Nat
@@ -128,3 +120,9 @@ theorem natModularTranslationInstantiation (m : Nat) (hm : 0 < m) (x k : Nat)
   exact abstractIdealTranslationInvariance ⟨0, hm⟩ ⟨1 % m, Nat.mod_lt 1 hm⟩
     h_add_zero (modProjPos m hm) x (k * m) h_adm (mul_in_kernel_modProjPos m hm k)
 
+#print axioms abstractIdealTranslationInvariance
+#print axioms abstractProjectiveTowerLift
+#print axioms abstractUnitModMul
+#print axioms bezoutImpliesUnitMod
+#print axioms spectralRegularizationDetBound
+#print axioms natModularTranslationInstantiation
