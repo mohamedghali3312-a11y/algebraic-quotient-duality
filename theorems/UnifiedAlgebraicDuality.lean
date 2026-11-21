@@ -89,4 +89,26 @@ theorem bezoutImpliesUnitMod
 theorem spectralRegularizationDetBound (lam1 lam2 mu : Nat) :
     mu * mu ≤ (lam1 + mu) * (lam2 + mu) := by
   rw [Nat.add_mul, Nat.mul_add, Nat.mul_add]
-  omega
+
+  -- ============================================================================
+-- SECTION 2 : INSTANCIATION CONCRÈTE SUR L'ARITHMÉTIQUE MODULAIRE (ℕ → Fin m)
+-- ============================================================================
+
+def modProj (m : Nat) : RingProj Nat Nat where
+  toFun := fun x => x % m
+  map_add := fun a b => Nat.add_mod a b m
+  map_mul := fun a b => Nat.mul_mod a b m
+
+theorem mul_in_kernel_modProj (m k : Nat) :
+    InKernel 0 (modProj m) (k * m) := by
+  dsimp only [InKernel, modProj]
+  exact Nat.mul_mod_left k m
+
+theorem natModularTranslationInstantiation (m x k : Nat)
+    (h_adm : IsUnitMod (1 % m) (modProj m) x) :
+    IsUnitMod (1 % m) (modProj m) (x + k * m) := by
+  apply abstractIdealTranslationInvariance 0 (1 % m) (fun q => Nat.add_zero q) (modProj m) x (k * m)
+  · exact h_adm
+  · exact mul_in_kernel_modProj m k
+
+omega
