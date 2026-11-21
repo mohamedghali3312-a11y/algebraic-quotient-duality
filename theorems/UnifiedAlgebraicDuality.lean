@@ -119,7 +119,89 @@ theorem natModularTranslationInstantiation (m : Nat) (hm : 0 < m) (x k : Nat)
     exact Nat.mod_eq_of_lt hv
   exact abstractIdealTranslationInvariance ⟨0, hm⟩ ⟨1 % m, Nat.mod_lt 1 hm⟩
     h_add_zero (modProjPos m hm) x (k * m) h_adm (mul_in_kernel_modProjPos m hm k)
+-- ============================================================================
+-- SECTION 3 : THÉORÈMES PURS DE SCINDEMENT CHINOIS, D'INVARIANCE POLYNOMIALE
+--             ET D'INJECTIVITÉ DE L'OPÉRATEUR QUOTIENT
+-- ============================================================================
 
+-- 6. Invariance idéale des puissances (monômes X^n) :
+-- Si π(k) = 0, alors pour tout exposant n, π((x + k)^n) = π(x^n).
+theorem abstractMonomialTranslationInvariance
+    {R Q : Type} [Add R] [Mul R] [Add Q] [Mul Q]
+    (zeroQ : Q)
+    (h_add_zero : ∀ q : Q, q + zeroQ = q)
+    (π : RingProj R Q)
+    (x k : R)
+    (h_ker : InKernel zeroQ π k) :
+    ∀ n : Nat, π.toFun ((x + k) ^ (n + 1)) = π.toFun (x ^ (n + 1)) := by
+  intro n
+  induction n with
+  | zero =>
+    simp only [Nat.pow_one]
+    rw [π.map_add, h_ker, h_add_zero]
+  | succ m ih =>
+    rw [Nat.pow_succ, Nat.pow_succ, π.map_mul, π.map_mul, ih]
+    have h_base : π.toFun (x + k) = π.toFun x := by
+      rw [π.map_add, h_ker, h_add_zero]
+    rw [h_base]
+
+-- 7. Surjectivité du Théorème des Restes Chinois abstrait :
+-- Si e1, e2 sont des idempotents orthogonaux modulo (π1, π2)
+-- (i.e. π1(e1) = 1, π1(e2) = 0 et π2(e1) = 0, π2(e2) = 1),
+-- alors pour tout couple (a1, a2), l'élément x = a1 * e1 + a2 * e2
+-- relève simultanément π1(x) = π1(a1) et π2(x) = π2(a2).
+theorem abstractCRTSurjectivity
+    {R Q1 Q2 : Type} [Add R] [Mul R] [Add Q1] [Mul Q1] [Add Q2] [Mul Q2]
+    (zero1 one1 : Q1) (zero2 one2 : Q2)
+    (h_add_zero1 : ∀ q : Q1, q + zero1 = q)
+    (h_zero_add2 : ∀ q : Q2, zero2 + q = q)
+    (h_mul_one1 : ∀ q : Q1, q * one1 = q)
+    (h_mul_zero1 : ∀ q : Q1, q * zero1 = zero1)
+    (h_mul_zero2 : ∀ q : Q2, q * zero2 = zero2)
+    (h_mul_one2 : ∀ q : Q2, q * one2 = q)
+    (π1 : RingProj R Q1) (π2 : RingProj R Q2)
+    (e1 e2 a1 a2 : R)
+    (h11 : π1.toFun e1 = one1) (h12 : π1.toFun e2 = zero1)
+    (h21 : π2.toFun e1 = zero2) (h22 : π2.toFun e2 = one2) :
+    π1.toFun (a1 * e1 + a2 * e2) = π1.toFun a1 ∧
+    π2.toFun (a1 * e1 + a2 * e2) = π2.toFun a2 := by
+  constructor
+  · rw [π1.map_add, π1.map_mul, π1.map_mul, h11, h12, h_mul_one1, h_mul_zero1, h_add_zero1]
+  · rw [π2.map_add, π2.map_mul, π2.map_mul, h21, h22, h_mul_zero2, h_mul_one2, h_zero_add2]
+
+-- 8. Injectivité de l'opérateur de multiplication quotient M_j(u) = u * Q_j mod B_j :
+-- Sous identité de Bézout U * Q_j + V * B_j = 1 avec B_j ∈ ker(π),
+-- si π(u * Q_j) = 0, alors nécessairement π(u) = 0 (noyau trivial de M_j).
+theorem quotientOperatorInjective
+    {R Q : Type} [Add R] [Mul R] [Add Q] [Mul Q]
+    (zeroQ oneQ : Q)
+    (h_add_zero : ∀ q : Q, q + zeroQ = q)
+    (h_zero_mul : ∀ q : Q, zeroQ * q = zeroQ)
+    (h_mul_zero : ∀ q : Q, q * zeroQ = zeroQ)
+    (h_mul_one : ∀ q : Q, q * oneQ = q)
+    (h_mul_assoc : ∀ a b c : Q, (a * b) * c = a * (b * c))
+    (h_mul_comm : ∀ a b : Q, a * b = b * a)
+    (π : RingProj R Q)
+    (oneR : R)
+    (h_one : π.toFun oneR = oneQ)
+    (U Qj V Bj u : R)
+    (h_bezout : U * Qj + V * Bj = oneR)
+    (h_bj_ker : InKernel zeroQ π Bj)
+    (h_in_ker : InKernel zeroQ π (u * Qj)) :
+    InKernel zeroQ π u := by
+  dsimp only [InKernel] at *
+  have h_unit : π.toFun Qj * π.toFun U = oneQ := by
+    have hp : π.toFun (U * Qj + V * Bj) = π.toFun oneR := by rw [h_bezout]
+    rw [π.map_add, π.map_mul, π.map_mul, h_bj_ker, h_mul_zero, h_add_zero, h_one, h_mul_comm] at hp
+    exact hp
+  have h_prod : π.toFun (u * Qj) * π.toFun U = zeroQ := by
+    rw [h_in_ker, h_zero_mul]
+  rw [π.map_mul, h_mul_assoc, h_unit, h_mul_one] at h_prod
+  exact h_prod
+
+#print axioms abstractMonomialTranslationInvariance
+#print axioms abstractCRTSurjectivity
+#print axioms quotientOperatorInjective
 #print axioms abstractIdealTranslationInvariance
 #print axioms abstractProjectiveTowerLift
 #print axioms abstractUnitModMul
