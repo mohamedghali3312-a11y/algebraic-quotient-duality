@@ -89,7 +89,7 @@ theorem bezoutImpliesUnitMod
 theorem spectralRegularizationDetBound (lam1 lam2 mu : Nat) :
     mu * mu ≤ (lam1 + mu) * (lam2 + mu) := by
   rw [Nat.add_mul, Nat.mul_add, Nat.mul_add]
-
+omega
 -- ============================================================================
 -- SECTION 2 : INSTANCIATION CONCRÈTE SUR L'ANNEAU QUOTIENT ℤ / mℤ (m > 0)
 -- ============================================================================
