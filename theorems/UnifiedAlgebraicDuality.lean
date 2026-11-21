@@ -90,25 +90,41 @@ theorem spectralRegularizationDetBound (lam1 lam2 mu : Nat) :
     mu * mu ≤ (lam1 + mu) * (lam2 + mu) := by
   rw [Nat.add_mul, Nat.mul_add, Nat.mul_add]
 
-  -- ============================================================================
--- SECTION 2 : INSTANCIATION CONCRÈTE SUR L'ARITHMÉTIQUE MODULAIRE (ℕ → Fin m)
+-- ============================================================================
+-- SECTION 2 : INSTANCIATION CONCRÈTE SUR L'ANNEAU QUOTIENT ℤ / mℤ (m > 0)
 -- ============================================================================
 
-def modProj (m : Nat) : RingProj Nat Nat where
-  toFun := fun x => x % m
-  map_add := fun a b => Nat.add_mod a b m
-  map_mul := fun a b => Nat.mul_mod a b m
+structure ZModPos (m : Nat) where
+  val : Nat
+  isLt : val < m
 
-theorem mul_in_kernel_modProj (m k : Nat) :
-    InKernel 0 (modProj m) (k * m) := by
-  dsimp only [InKernel, modProj]
+instance (m : Nat) : Add (ZModPos m) where
+  add a b := ⟨(a.val + b.val) % m, Nat.mod_lt _ (Nat.lt_of_le_of_lt (Nat.zero_le _) a.isLt)⟩
+
+instance (m : Nat) : Mul (ZModPos m) where
+  mul a b := ⟨(a.val * b.val) % m, Nat.mod_lt _ (Nat.lt_of_le_of_lt (Nat.zero_le _) a.isLt)⟩
+
+def modProjPos (m : Nat) (hm : 0 < m) : RingProj Nat (ZModPos m) where
+  toFun := fun x => ⟨x % m, Nat.mod_lt x hm⟩
+  map_add := fun a b => by
+    simp only [HAdd.hAdd, Add.add, ZModPos.mk.injEq]
+    exact Nat.add_mod a b m
+  map_mul := fun a b => by
+    simp only [HMul.hMul, Mul.mul, ZModPos.mk.injEq]
+    exact Nat.mul_mod a b m
+
+theorem mul_in_kernel_modProjPos (m : Nat) (hm : 0 < m) (k : Nat) :
+    InKernel ⟨0, hm⟩ (modProjPos m hm) (k * m) := by
+  simp only [InKernel, modProjPos, ZModPos.mk.injEq]
   exact Nat.mul_mod_left k m
 
-theorem natModularTranslationInstantiation (m x k : Nat)
-    (h_adm : IsUnitMod (1 % m) (modProj m) x) :
-    IsUnitMod (1 % m) (modProj m) (x + k * m) := by
-  apply abstractIdealTranslationInvariance 0 (1 % m) (fun q => Nat.add_zero q) (modProj m) x (k * m)
-  · exact h_adm
-  · exact mul_in_kernel_modProj m k
+theorem natModularTranslationInstantiation (m : Nat) (hm : 0 < m) (x k : Nat)
+    (h_adm : IsUnitMod ⟨1 % m, Nat.mod_lt 1 hm⟩ (modProjPos m hm) x) :
+    IsUnitMod ⟨1 % m, Nat.mod_lt 1 hm⟩ (modProjPos m hm) (x + k * m) := by
+  have h_add_zero : ∀ q : ZModPos m, q + ⟨0, hm⟩ = q := by
+    intro ⟨v, hv⟩
+    simp only [HAdd.hAdd, Add.add, ZModPos.mk.injEq, Nat.add_zero]
+    exact Nat.mod_eq_of_lt hv
+  exact abstractIdealTranslationInvariance ⟨0, hm⟩ ⟨1 % m, Nat.mod_lt 1 hm⟩
+    h_add_zero (modProjPos m hm) x (k * m) h_adm (mul_in_kernel_modProjPos m hm k)
 
-omega
