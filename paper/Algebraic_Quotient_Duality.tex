@@ -1,0 +1,68 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+\newtheorem{definition}{Définition}[section]
+\newtheorem{theorem}{Théorème}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{corollary}{Corollaire}[section]
+
+\title{\textbf{Invariance Profinie, Dualité Quotient--Bézout et Régularisation Spectrale sur les Anneaux Principaux}}
+\author{Mohamed Ghali \\ \small ORCID : 0009-0006-3364-5341}
+\date{Novembre 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Nous établissons une dualité algébrique et topologique unifiée régissant l'inversibilité modulaire dans les anneaux principaux $R$ (tels que $\mathbb{Z}$, les entiers de Gauss $\mathbb{Z}[i]$ et l'anneau des polynômes réels $\mathbb{R}[X]$). D'une part, pour toute filtration décroissante d'idéaux $(I_r)_{r \ge 0}$ à quotients finis, le lieu d'admissibilité globale $\Omega(\mathcal{F})$ d'une famille polynomiale $\mathcal{F} \subset R[X]$ forme un sous-espace compact du complété profini $\widehat{R}$ invariant par translation idéale, dont la mesure de Haar normalisée se factorise en produit eulérien. D'autre part, dans $\mathbb{R}[X]/(Q)$ où $Q = \prod_{j=1}^n B_j$, l'opérateur de multiplication $\mathcal{M}_j : u \mapsto u Q_j \bmod B_j$ est un isomorphisme si et seulement si $\gcd(B_j, Q_j) = 1$ ; en présence de racines multiples ($\det \mathcal{M}_j = 0$), la régularisation spectrale $\mathcal{A}_j^* = \mathcal{M}_j^\top \mathcal{M}_j + H_+ + \mu\,\mathrm{Id}$ ($H_+ \succeq 0, \mu > 0$) restaure l'inversibilité avec la minoration $\det(\mathcal{A}_j^*) \ge \mu^2 > 0$. L'ensemble des fondements algébriques est formellement vérifié en Lean~4 pur.
+\end{abstract}
+
+\section{Invariance Profinie et Factorisation Eulérienne}
+
+Soit $R$ un anneau commutatif unitaire muni d'une suite décroissante d'idéaux $I_{r+1} \subseteq I_r$ telle que $Q_r = R/I_r$ soit fini. On note $\pi_r : R \twoheadrightarrow Q_r$ et $\varphi_{s,r} : Q_s \twoheadrightarrow Q_r$ ($r \le s$) les morphismes canoniques.
+
+\begin{theorem}[Invariance Idéale et Compatibilité Projective]
+Soient $\mathcal{F} = \{f_1, \dots, f_k\} \subset R[X]$ et $\mathcal{A}_r(\mathcal{F}) = \{ \bar{x} \in Q_r \mid \forall i,\ f_i(\bar{x}) \in Q_r^\times \}$.
+\begin{enumerate}
+    \item \textbf{Translation idéale :} Si $\pi_r(x) \in \mathcal{A}_r(\mathcal{F})$ et $h \in I_r$, alors $\pi_r(x + h) \in \mathcal{A}_r(\mathcal{F})$ (\texttt{abstractIdealTranslationInvariance}).
+    \item \textbf{Relèvement projectif :} Pour tout $r \le s$, $\varphi_{s,r}(\mathcal{A}_s(\mathcal{F})) \subseteq \mathcal{A}_r(\mathcal{F})$ (\texttt{abstractProjectiveTowerLift}).
+    \item \textbf{Mesure de Haar :} Sur le compact profini $\widehat{R} = \varprojlim_r Q_r$, le lieu $\Omega(\mathcal{F}) = \bigcap_{i=1}^k f_i^{-1}(\widehat{R}^\times)$ vérifie $\mu(\Omega(\mathcal{F})) = \lim_{r \to \infty} |\mathcal{A}_r(\mathcal{F})| / |Q_r|$.
+\end{enumerate}
+\end{theorem}
+
+\section{Dualité Quotient--Bézout et Régularisation Spectrale}
+
+Soit $Q(X) = \prod_{j=1}^n B_j(X) \in \mathbb{R}[X]$ une décomposition en polynômes unitaires quadratiques $B_j(X) = X^2 + S_j X + P_j$, et $Q_j(X) = \prod_{k \neq j} B_k(X)$ le cofacteur associé au $j$-ième bloc.
+
+\begin{theorem}[Équivalence Bézout--Quotient et Régularisation]
+Pour chaque bloc $B_j(X)$, soit $\mathcal{M}_j \in \mathrm{End}_{\mathbb{R}}(\mathbb{R}[X]/(B_j))$ l'opérateur défini par $\mathcal{M}_j(u) = u Q_j \bmod B_j$ :
+\begin{enumerate}
+    \item \textbf{Régime coprime :} $\det(\mathcal{M}_j) \neq 0 \iff \gcd(B_j, Q_j) = 1 \iff \exists U, V \in \mathbb{R}[X],\ U Q_j + V B_j = 1$ (\texttt{bezoutImpliesUnitMod}), induisant le scindement $\mathbb{R}[X]/(Q) \cong \prod_{j=1}^n \mathbb{R}[X]/(B_j)$.
+    \item \textbf{Régime singulier :} Pour tout opérateur symétrique semi-défini positif $H_+ \succeq 0$ et tout $\mu > 0$, l'opérateur $\mathcal{A}_j^* = \mathcal{M}_j^\top \mathcal{M}_j + H_+ + \mu\,\mathrm{Id}$ satisfait $\det(\mathcal{A}_j^*) = (\lambda_1 + \mu)(\lambda_2 + \mu) \ge \mu^2 > 0$ (\texttt{spectralRegularizationDetBound}).
+\end{enumerate}
+\end{theorem}
+
+\section{Synthèse des Correspondances Structurelles}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{p{3.8cm} p{4.8cm} p{5.2cm}}
+\toprule
+\textbf{Concept Algébrique} & \textbf{Anneau des Entiers $\mathbb{Z}$ / $\mathbb{Z}[i]$} & \textbf{Anneau des Polynômes $\mathbb{R}[X]$ / $\mathbb{C}[X]$} \\
+\midrule
+Idéaux générateurs & Idéaux premiers $(p_i)$ & Facteurs quadratiques $(B_j(X))$ \\
+Condition d'inversibilité & $\gcd(x, V_r) = 1$ & $\gcd(B_j, Q_j) = 1 \iff \det(\mathcal{M}_j) \neq 0$ \\
+Scindement chinois & $\mathbb{Z}/V_r\mathbb{Z} \cong \prod \mathbb{Z}/p_i\mathbb{Z}$ & $\mathbb{R}[X]/(Q) \cong \prod \mathbb{R}[X]/(B_j)$ \\
+Norme complexe & $N(a+bi) = a^2 + b^2$ & $Q(X) = P(X)\overline{P(X)} \in \mathbb{R}[X]$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}
