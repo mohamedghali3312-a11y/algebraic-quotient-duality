@@ -483,21 +483,17 @@ theorem erdosStrausMod5Eq0 (k : Nat) :
 theorem erdosStrausMod7Eq0 (k : Nat) :
     4 * (2 * k) * (15 * k) * (210 * k) =
     (7 * k) * ((15 * k) * (210 * k) + (2 * k) * (210 * k) + (2 * k) * (15 * k)) := by
-  have h_lhs : 4 * (2 * k) * (15 * k) * (210 * k) = 25200 * (k * k * k) := by
-    have h_eq : 4 * (2 * k) * (15 * k) * (210 * k) = (4 * 2 * 15 * 210) * (k * k * k) := by ac_rfl; rw [h_eq]
-  have h1 : (15 * k) * (210 * k) = 3150 * (k * k) := by
-    have h_eq : (15 * k) * (210 * k) = (15 * 210) * (k * k) := by ac_rfl; rw [h_eq]
-  have h2 : (2 * k) * (210 * k) = 420 * (k * k) := by
-    have h_eq : (2 * k) * (210 * k) = (2 * 210) * (k * k) := by ac_rfl; rw [h_eq]
-  have h3 : (2 * k) * (15 * k) = 30 * (k * k) := by
-    have h_eq : (2 * k) * (15 * k) = (2 * 15) * (k * k) := by ac_rfl; rw [h_eq]
-  rw [h1, h2, h3]
-  have h_sum : 3150 * (k * k) + 420 * (k * k) + 30 * (k * k) = 3600 * (k * k) := by omega
-  rw [h_sum]
-
-  rw [h_lhs]
-  have h_const : 7 * 3600 = 25200 := rfl
-  rw [← h_const]; ac_rfl
+  
+  have h1 : (15 * k) * (210 * k) + (2 * k) * (210 * k) + (2 * k) * (15 * k) = 3600 * (k * k) := by
+    have e1 : (15 * k) * (210 * k) = 3150 * (k * k) := by ac_rfl
+    have e2 : (2 * k) * (210 * k) = 420 * (k * k) := by ac_rfl
+    have e3 : (2 * k) * (15 * k) = 30 * (k * k) := by ac_rfl
+    rw [e1, e2, e3]; omega
+  rw [h1]
+  have h_c1 : 4 * 2 * 15 * 210 = 7 * 3600 := rfl
+  have h_lhs : 4 * (2 * k) * (15 * k) * (210 * k) = (4 * 2 * 15 * 210) * (k * k * k) := by ac_rfl
+  have h_rhs : (7 * k) * (3600 * (k * k)) = (7 * 3600) * (k * k * k) := by ac_rfl
+  rw [h_lhs, h_rhs, h_c1]
 
 def HasErdosStraus (n : Nat) : Prop :=
   ∃ x y z : Nat, 0 < x ∧ 0 < y ∧ 0 < z ∧ 4 * x * y * z = n * (y * z + x * z + x * y)
