@@ -572,7 +572,9 @@ theorem erdosStrausCase48_17 (n : Nat) (h : n % 48 = 17) : HasErdosStraus n := b
   refine ⟨12 * q + 5, (48 * q + 17) * (4 * q + 2),
     (48 * q + 17) * (12 * q + 5) * (4 * q + 2),
     by omega, hy, hz, ?_⟩
-  exact erdosStrausMod48Eq17 q
+  have h_eq := erdosStrausMod48Eq17 q
+  simp only [Nat.mul_assoc] at h_eq ⊢
+  exact h_eq
 
 theorem erdosStrausCase5 (n : Nat) (hn : 5 <= n) (h : n % 5 = 0) : HasErdosStraus n := by
   unfold HasErdosStraus
