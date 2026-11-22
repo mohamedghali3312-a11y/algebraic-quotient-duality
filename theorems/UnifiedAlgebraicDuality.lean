@@ -544,13 +544,15 @@ theorem erdosStrausCase24_13 (n : Nat) (h : n % 24 = 13) : HasErdosStraus n := b
 
 theorem erdosStrausCase48_17 (n : Nat) (h : n % 48 = 17) : HasErdosStraus n := by
   have h_dm := Nat.div_add_mod n 48
-  let q := n / 48
-  have hn_eq : n = 48 * q + 17 := by omega
+  have hex : ∃ q, n = 48 * q + 17 := ⟨n / 48, by omega⟩
+  rcases hex with ⟨q, hn_eq⟩
+  subst hn_eq
+  have hy : 0 < (48 * q + 17) * (4 * q + 2) + 1 := by omega
   have hz : 0 < ((48 * q + 17) * (4 * q + 2)) * ((48 * q + 17) * (4 * q + 2) + 1) :=
     Nat.mul_pos (Nat.mul_pos (by omega) (by omega)) (by omega)
-  refine ⟨12 * q + 5, (48 * q + 17) * (4 * q + 2) + 1, ((48 * q + 17) * (4 * q + 2)) * ((48 * q + 17) * (4 * q + 2) + 1), by omega, by omega, hz, ?_⟩
-  rw [hn_eq]
-  exact erdosStrausMod48Eq17 q
+  exact ⟨12 * q + 5, (48 * q + 17) * (4 * q + 2) + 1,
+    ((48 * q + 17) * (4 * q + 2)) * ((48 * q + 17) * (4 * q + 2) + 1),
+    by omega, hy, hz, erdosStrausMod48Eq17 q⟩
 
 theorem erdosStrausCase5 (n : Nat) (hn : 5 <= n) (h : n % 5 = 0) : HasErdosStraus n := by
   have h_dm := Nat.div_add_mod n 5
