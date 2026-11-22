@@ -917,7 +917,7 @@ theorem erdosStrausMod168Eq145 (m : Nat) :
     have t3 : (2 * u) * (2 * n * v) = n * u * v * 4 := by
       have e : (2 * u) * (2 * n * v) = n * u * v * (2 * 2) := by ac_rfl
       rw [e]
-    rw [t1, t2, t3, ← Nat.mul_add, ← Nat.mul_add]
+    rw [t1, t2, t3, ← Nat.mul_add, ← Nat.mul_add, Nat.add_assoc]
   have h_factor : 2 * n * v + (2 * u + 4) = v * (2 * n + 14) := by
     rw [h_u4]
     have t1 : 2 * n * v = v * (2 * n) := by ac_rfl
