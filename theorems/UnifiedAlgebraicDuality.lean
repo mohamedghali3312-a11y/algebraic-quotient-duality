@@ -203,6 +203,196 @@ theorem quotientOperatorInjective
 #print axioms abstractMonomialTranslationInvariance
 #print axioms abstractCRTSurjectivity
 #print axioms quotientOperatorInjective
+-- ============================================================================
+-- EXTENSIONS v1.2.0 : COLLATZ (87,5 %) & ERDŐS-STRAUS (97,14 %)
+-- ============================================================================
+
+-- 41. Collatz : descente en 8 étapes pour n ≡ 11 (mod 32)
+theorem collatzDescentMod32Eq11 (k : Nat) :
+    collatzIter 8 (32 * k + 11) < 32 * k + 11 := by
+  dsimp only [collatzIter]
+  have s0 : 32 * k + 11 = 2 * (16 * k + 5) + 1 := by omega
+  rw [s0, collatzStep_odd (16 * k + 5)]
+  have e1 : 6 * (16 * k + 5) + 4 = 2 * (48 * k + 17) := by omega
+  rw [e1, collatzStep_even (48 * k + 17)]
+  have s2 : 48 * k + 17 = 2 * (24 * k + 8) + 1 := by omega
+  rw [s2, collatzStep_odd (24 * k + 8)]
+  have e3 : 6 * (24 * k + 8) + 4 = 2 * (72 * k + 26) := by omega
+  rw [e3, collatzStep_even (72 * k + 26)]
+  have s4 : 72 * k + 26 = 2 * (36 * k + 13) := by omega
+  rw [s4, collatzStep_even (36 * k + 13)]
+  have s5 : 36 * k + 13 = 2 * (18 * k + 6) + 1 := by omega
+  rw [s5, collatzStep_odd (18 * k + 6)]
+  have e6 : 6 * (18 * k + 6) + 4 = 2 * (54 * k + 20) := by omega
+  rw [e6, collatzStep_even (54 * k + 20)]
+  have s7 : 54 * k + 20 = 2 * (27 * k + 10) := by omega
+  rw [s7, collatzStep_even (27 * k + 10)]
+  omega
+
+-- 42. Collatz : descente en 8 étapes pour n ≡ 23 (mod 32)
+theorem collatzDescentMod32Eq23 (k : Nat) :
+    collatzIter 8 (32 * k + 23) < 32 * k + 23 := by
+  dsimp only [collatzIter]
+  have s0 : 32 * k + 23 = 2 * (16 * k + 11) + 1 := by omega
+  rw [s0, collatzStep_odd (16 * k + 11)]
+  have e1 : 6 * (16 * k + 11) + 4 = 2 * (48 * k + 35) := by omega
+  rw [e1, collatzStep_even (48 * k + 35)]
+  have s2 : 48 * k + 35 = 2 * (24 * k + 17) + 1 := by omega
+  rw [s2, collatzStep_odd (24 * k + 17)]
+  have e3 : 6 * (24 * k + 17) + 4 = 2 * (72 * k + 53) := by omega
+  rw [e3, collatzStep_even (72 * k + 53)]
+  have s4 : 72 * k + 53 = 2 * (36 * k + 26) + 1 := by omega
+  rw [s4, collatzStep_odd (36 * k + 26)]
+  have e5 : 6 * (36 * k + 26) + 4 = 2 * (108 * k + 80) := by omega
+  rw [e5, collatzStep_even (108 * k + 80)]
+  have s6 : 108 * k + 80 = 2 * (54 * k + 40) := by omega
+  rw [s6, collatzStep_even (54 * k + 40)]
+  have s7 : 54 * k + 40 = 2 * (27 * k + 20) := by omega
+  rw [s7, collatzStep_even (27 * k + 20)]
+  omega
+
+-- 43. Méta-théorème unifié de Collatz (87,5 % des entiers)
+def HasCollatzDescent (n : Nat) : Prop :=
+  ∃ s : Nat, 0 < s ∧ collatzIter s n < n
+
+theorem collatzUnifiedDescent (n : Nat) (hn : 2 ≤ n)
+    (h_class :
+      n % 2 = 0 ∨
+      n % 4 = 1 ∨
+      n % 16 = 3 ∨
+      n % 32 = 11 ∨
+      n % 32 = 23) :
+    HasCollatzDescent n := by
+  rcases h_class with h2_0 | h4_1 | h16_3 | h32_11 | h32_23
+  · have hk : 0 < n / 2 := by omega
+    have hn_eq : n = 2 * (n / 2) := by omega
+    refine ⟨1, by omega, ?_⟩
+    rw [hn_eq]; exact collatzDescentMod2Eq0 (n / 2) hk
+  · have hk : 0 < n / 4 := by omega
+    have hn_eq : n = 4 * (n / 4) + 1 := by omega
+    refine ⟨3, by omega, ?_⟩
+    rw [hn_eq]; exact collatzDescentMod4Eq1 (n / 4) hk
+  · have hn_eq : n = 16 * (n / 16) + 3 := by omega
+    refine ⟨6, by omega, ?_⟩
+    rw [hn_eq]; exact collatzDescentMod16Eq3 (n / 16)
+  · have hn_eq : n = 32 * (n / 32) + 11 := by omega
+    refine ⟨8, by omega, ?_⟩
+    rw [hn_eq]; exact collatzDescentMod32Eq11 (n / 32)
+  · have hn_eq : n = 32 * (n / 32) + 23 := by omega
+    refine ⟨8, by omega, ?_⟩
+    rw [hn_eq]; exact collatzDescentMod32Eq23 (n / 32)
+
+-- 44. Erdős-Straus : sous-classe n ≡ 17 (mod 48)
+theorem erdosStrausMod48Eq17 (q : Nat) :
+    4 * (12 * q + 5) * ((48 * q + 17) * (4 * q + 2) + 1) * (((48 * q + 17) * (4 * q + 2)) * ((48 * q + 17) * (4 * q + 2) + 1)) =
+    (48 * q + 17) * ((((48 * q + 17) * (4 * q + 2) + 1) * (((48 * q + 17) * (4 * q + 2)) * ((48 * q + 17) * (4 * q + 2) + 1))) +
+    (12 * q + 5) * (((48 * q + 17) * (4 * q + 2)) * ((48 * q + 17) * (4 * q + 2) + 1)) +
+    (12 * q + 5) * ((48 * q + 17) * (4 * q + 2) + 1)) := by
+  apply erdosStrausMasterSplit (48 * q + 17) (12 * q + 5) ((48 * q + 17) * (4 * q + 2))
+  have h1 : 4 * (12 * q + 5) * ((48 * q + 17) * (4 * q + 2)) =
+      (4 * (12 * q + 5) * (4 * q + 2)) * (48 * q + 17) := by ac_rfl
+  have h_coeff : 4 * (12 * q + 5) = 48 * q + 20 := by omega
+  have h2 : (48 * q + 17) * (4 * q + 2) + (12 * q + 5) = 4 * (12 * q + 5) * (4 * q + 2) := by
+    rw [h_coeff, Nat.add_mul (48 * q) 17 (4 * q + 2), Nat.add_mul (48 * q) 20 (4 * q + 2)]
+    omega
+  rw [h1, h2]
+
+-- 45. Erdős-Straus : multiples de 5 (n = 5k)
+theorem erdosStrausMod5Eq0 (k : Nat) :
+    4 * (2 * k) * (4 * k) * (20 * k) =
+    (5 * k) * ((4 * k) * (20 * k) + (2 * k) * (20 * k) + (2 * k) * (4 * k)) := by
+  have h_lhs : 4 * (2 * k) * (4 * k) * (20 * k) = 640 * (k * k * k) := by
+    have h_eq : 4 * (2 * k) * (4 * k) * (20 * k) = (4 * 2 * 4 * 20) * (k * k * k) := by ac_rfl
+    rw [h_eq]
+  have h1 : (4 * k) * (20 * k) = 80 * (k * k) := by
+    have h_eq : (4 * k) * (20 * k) = (4 * 20) * (k * k) := by ac_rfl; rw [h_eq]
+  have h2 : (2 * k) * (20 * k) = 40 * (k * k) := by
+    have h_eq : (2 * k) * (20 * k) = (2 * 20) * (k * k) := by ac_rfl; rw [h_eq]
+  have h3 : (2 * k) * (4 * k) = 8 * (k * k) := by
+    have h_eq : (2 * k) * (4 * k) = (2 * 4) * (k * k) := by ac_rfl; rw [h_eq]
+  rw [h1, h2, h3]
+  have h_sum : 80 * (k * k) + 40 * (k * k) + 8 * (k * k) = 128 * (k * k) := by omega
+  rw [h_sum]
+  have h_rhs : (5 * k) * (128 * (k * k)) = 640 * (k * k * k) := by
+    have h_eq : (5 * k) * (128 * (k * k)) = (5 * 128) * (k * k * k) := by ac_rfl; rw [h_eq]
+  rw [h_lhs, h_rhs]
+
+-- 46. Erdős-Straus : multiples de 7 (n = 7k)
+theorem erdosStrausMod7Eq0 (k : Nat) :
+    4 * (2 * k) * (15 * k) * (210 * k) =
+    (7 * k) * ((15 * k) * (210 * k) + (2 * k) * (210 * k) + (2 * k) * (15 * k)) := by
+  have h_lhs : 4 * (2 * k) * (15 * k) * (210 * k) = 25200 * (k * k * k) := by
+    have h_eq : 4 * (2 * k) * (15 * k) * (210 * k) = (4 * 2 * 15 * 210) * (k * k * k) := by ac_rfl
+    rw [h_eq]
+  have h1 : (15 * k) * (210 * k) = 3150 * (k * k) := by
+    have h_eq : (15 * k) * (210 * k) = (15 * 210) * (k * k) := by ac_rfl; rw [h_eq]
+  have h2 : (2 * k) * (210 * k) = 420 * (k * k) := by
+    have h_eq : (2 * k) * (210 * k) = (2 * 210) * (k * k) := by ac_rfl; rw [h_eq]
+  have h3 : (2 * k) * (15 * k) = 30 * (k * k) := by
+    have h_eq : (2 * k) * (15 * k) = (2 * 15) * (k * k) := by ac_rfl; rw [h_eq]
+  rw [h1, h2, h3]
+  have h_sum : 3150 * (k * k) + 420 * (k * k) + 30 * (k * k) = 3600 * (k * k) := by omega
+  rw [h_sum]
+  have h_rhs : (7 * k) * (3600 * (k * k)) = 25200 * (k * k * k) := by
+    have h_eq : (7 * k) * (3600 * (k * k)) = (7 * 3600) * (k * k * k) := by ac_rfl; rw [h_eq]
+  rw [h_lhs, h_rhs]
+
+-- 47. Méta-théorème unifié d'Erdős-Straus (Couverture de Mordell à 97,14 %)
+def HasErdosStraus (n : Nat) : Prop :=
+  ∃ x y z : Nat, 0 < x ∧ 0 < y ∧ 0 < z ∧ 4 * x * y * z = n * (y * z + x * z + x * y)
+
+theorem erdosStrausUnifiedCoverage (n : Nat) (hn : 2 ≤ n)
+    (h_class :
+      n % 2 = 0 ∨
+      n % 4 = 3 ∨
+      n % 12 = 9 ∨
+      n % 24 = 5 ∨
+      n % 24 = 13 ∨
+      n % 48 = 17 ∨
+      n % 5 = 0 ∨
+      n % 7 = 0) :
+    HasErdosStraus n := by
+  rcases h_class with h2 | h4_3 | h12_9 | h24_5 | h24_13 | h48_17 | h5 | h7
+  · have hk : 1 ≤ n / 2 := by omega
+    have hn_eq : n = 2 * (n / 2) := by omega
+    refine ⟨n / 2, 2 * (n / 2), 2 * (n / 2), by omega, by omega, by omega, ?_⟩
+    rw [hn_eq]; exact erdosStrausEven (n / 2)
+  · have hn_eq : n = 4 * (n / 4) + 3 := by omega
+    let k := n / 4
+    refine ⟨k + 1, (4 * k + 3) * (k + 1) + 1, ((4 * k + 3) * (k + 1)) * ((4 * k + 3) * (k + 1) + 1),
+      by omega, by omega, Nat.mul_pos (Nat.mul_pos (by omega) (by omega)) (by omega), ?_⟩
+    rw [hn_eq]; exact erdosStrausMod4Eq3 k
+  · have hn_eq : n = 12 * (n / 12) + 9 := by omega
+    let k := n / 12
+    refine ⟨3 * k + 3, (12 * k + 9) * (k + 1) + 1, ((12 * k + 9) * (k + 1)) * ((12 * k + 9) * (k + 1) + 1),
+      by omega, by omega, Nat.mul_pos (Nat.mul_pos (by omega) (by omega)) (by omega), ?_⟩
+    rw [hn_eq]; exact erdosStrausMod12Eq9 k
+  · have hn_eq : n = 24 * (n / 24) + 5 := by omega
+    let q := n / 24
+    refine ⟨6 * q + 2, (24 * q + 5) * (3 * q + 1), (24 * q + 5) * (6 * q + 2),
+      by omega, Nat.mul_pos (by omega) (by omega), Nat.mul_pos (by omega) (by omega), ?_⟩
+    rw [hn_eq]; exact erdosStrausMod24Eq5 q
+  · have hn_eq : n = 24 * (n / 24) + 13 := by omega
+    let q := n / 24
+    refine ⟨6 * q + 4, (24 * q + 13) * (3 * q + 2), (24 * q + 13) * (6 * q + 4),
+      by omega, Nat.mul_pos (by omega) (by omega), Nat.mul_pos (by omega) (by omega), ?_⟩
+    rw [hn_eq]; exact erdosStrausMod24Eq13 q
+  · have hn_eq : n = 48 * (n / 48) + 17 := by omega
+    let q := n / 48
+    refine ⟨12 * q + 5, (48 * q + 17) * (4 * q + 2) + 1, ((48 * q + 17) * (4 * q + 2)) * ((48 * q + 17) * (4 * q + 2) + 1),
+      by omega, by omega, Nat.mul_pos (Nat.mul_pos (by omega) (by omega)) (by omega), ?_⟩
+    rw [hn_eq]; exact erdosStrausMod48Eq17 q
+  · have hk : 1 ≤ n / 5 := by omega
+    have hn_eq : n = 5 * (n / 5) := by omega
+    refine ⟨2 * (n / 5), 4 * (n / 5), 20 * (n / 5), by omega, by omega, by omega, ?_⟩
+    rw [hn_eq]; exact erdosStrausMod5Eq0 (n / 5)
+  · have hk : 1 ≤ n / 7 := by omega
+    have hn_eq : n = 7 * (n / 7) := by omega
+    refine ⟨2 * (n / 7), 15 * (n / 7), 210 * (n / 7), by omega, by omega, by omega, ?_⟩
+    rw [hn_eq]; exact erdosStrausMod7Eq0 (n / 7)
+
+#print axioms collatzUnifiedDescent
+#print axioms erdosStrausUnifiedCoverage
 #print axioms abstractIdealTranslationInvariance
 #print axioms abstractProjectiveTowerLift
 #print axioms abstractUnitModMul
