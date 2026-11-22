@@ -464,21 +464,17 @@ theorem erdosStrausMod48Eq17 (q : Nat) :
 
 theorem erdosStrausMod5Eq0 (k : Nat) :
     4 * (2 * k) * (4 * k) * (20 * k) =
-    (5 * k) * ((4 * k) * (20 * k) + (2 * k) * (20 * k) + (2 * k) * (4 * k)) := by
-  have h_lhs : 4 * (2 * k) * (4 * k) * (20 * k) = 640 * (k * k * k) := by
-    have h_eq : 4 * (2 * k) * (4 * k) * (20 * k) = (4 * 2 * 4 * 20) * (k * k * k) := by ac_rfl; rw [h_eq]
-  have h1 : (4 * k) * (20 * k) = 80 * (k * k) := by
-    have h_eq : (4 * k) * (20 * k) = (4 * 20) * (k * k) := by ac_rfl; rw [h_eq]
-  have h2 : (2 * k) * (20 * k) = 40 * (k * k) := by
-    have h_eq : (2 * k) * (20 * k) = (2 * 20) * (k * k) := by ac_rfl; rw [h_eq]
-  have h3 : (2 * k) * (4 * k) = 8 * (k * k) := by
-    have h_eq : (2 * k) * (4 * k) = (2 * 4) * (k * k) := by ac_rfl; rw [h_eq]
-  rw [h1, h2, h3]
-  have h_sum : 80 * (k * k) + 40 * (k * k) + 8 * (k * k) = 128 * (k * k) := by omega
-  rw [h_sum]
-  have h_rhs : (5 * k) * (128 * (k * k)) = 640 * (k * k * k) := by
-    have h_eq : (5 * k) * (128 * (k * k)) = (5 * 128) * (k * k * k) := by ac_rfl; rw [h_eq]
-  rw [h_lhs, h_rhs]
+    
+  have h1 : (4 * k) * (20 * k) + (2 * k) * (20 * k) + (2 * k) * (4 * k) = 128 * (k * k) := by
+    have e1 : (4 * k) * (20 * k) = 80 * (k * k) := by ac_rfl
+    have e2 : (2 * k) * (20 * k) = 40 * (k * k) := by ac_rfl
+    have e3 : (2 * k) * (4 * k) = 8 * (k * k) := by ac_rfl
+    rw [e1, e2, e3]; omega
+  rw [h1]
+  have h_c1 : 4 * 2 * 4 * 20 = 5 * 128 := rfl
+  have h_lhs : 4 * (2 * k) * (4 * k) * (20 * k) = (4 * 2 * 4 * 20) * (k * k * k) := by ac_rfl
+  have h_rhs : (5 * k) * (128 * (k * k)) = (5 * 128) * (k * k * k) := by ac_rfl
+  rw [h_lhs, h_rhs, h_c1]
 
 theorem erdosStrausMod7Eq0 (k : Nat) :
     4 * (2 * k) * (15 * k) * (210 * k) =
