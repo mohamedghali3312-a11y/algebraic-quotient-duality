@@ -568,6 +568,7 @@ theorem erdosStrausCase7 (n : Nat) (hn : 7 <= n) (h : n % 7 = 0) : HasErdosStrau
   have h_congr := congrArg (fun x => x * ((15 * k) * (210 * k) + (2 * k) * (210 * k) + (2 * k) * (15 * k))) hn_eq.symm
   exact ⟨2 * k, 15 * k, 210 * k, by omega, by omega, by omega, Eq.trans h_id h_congr⟩
 
+
 theorem erdosStrausUnifiedCoverage (n : Nat) (hn : 7 ≤ n)
     (h_class : n % 2 = 0 ∨ n % 4 = 3 ∨ n % 12 = 9 ∨ n % 24 = 5 ∨ n % 24 = 13 ∨ n % 48 = 17 ∨ n % 5 = 0 ∨ n % 7 = 0) :
     HasErdosStraus n := by
