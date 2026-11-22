@@ -553,8 +553,6 @@ theorem erdosStrausCase48_17 (n : Nat) (h : n % 48 = 17) : HasErdosStraus n := b
   exact erdosStrausMod48Eq17 q
 
 theorem erdosStrausCase5 (n : Nat) (hn : 5 <= n) (h : n % 5 = 0) : HasErdosStraus n := by
-
-theorem erdosStrausCase5 (n : Nat) (hn : 5 <= n) (h : n % 5 = 0) : HasErdosStraus n := by
   have h_dm := Nat.div_add_mod n 5
   let k := n / 5
   have hn_eq : n = 5 * k := by omega
