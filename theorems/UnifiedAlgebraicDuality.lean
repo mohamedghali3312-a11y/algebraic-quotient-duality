@@ -556,8 +556,7 @@ theorem erdosStrausCase5 (n : Nat) (hn : 5 <= n) (h : n % 5 = 0) : HasErdosStrau
   have h_dm := Nat.div_add_mod n 5
   let k := n / 5
   have hn_eq : n = 5 * k := by omega
-  refine ⟨2 * k, 4 * k, 20 * k,
-    by omega, by omega, by omega, ?_⟩
+  refine ⟨2 * k, 4 * k, 20 * k,by omega, by omega, by omega, ?_⟩
   rw [hn_eq]
   exact erdosStrausMod5Eq0 k
 
@@ -565,8 +564,7 @@ theorem erdosStrausCase7 (n : Nat) (hn : 7 <= n) (h : n % 7 = 0) : HasErdosStrau
   have h_dm := Nat.div_add_mod n 7
   let k := n / 7
   have hn_eq : n = 7 * k := by omega
-  refine ⟨2 * k, 15 * k, 210 * k,
-    by omega, by omega, by omega, ?_⟩
+  refine ⟨2 * k, 15 * k, 210 * k,by omega, by omega, by omega, ?_⟩
   rw [hn_eq]
   exact erdosStrausMod7Eq0 k
 
