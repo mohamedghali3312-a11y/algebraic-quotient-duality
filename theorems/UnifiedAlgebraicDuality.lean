@@ -900,22 +900,15 @@ theorem erdosStrausMod168Eq145 (m : Nat) :
   let y := 2 * n * v
   let z := n * u * v
   have hx : 42 * m + 38 = 2 * u := by dsimp [u]; omega
-  have hy : 6 * n * (m + 1) = y := by
-    dsimp [y, v]
-    have e : 6 * n * (m + 1) = 2 * n * (3 * (m + 1)) := by have h6 : (6 : Nat) = 2 * 3 := rfl; rw [h6]; acac_rfl
-    exact e
- 
+  have hy : 6 * n * (m + 1) = y := by dsimp [y, v]; have h6 : (6 : Nat) = 2 * 3 := rfl; rw [h6]; ac_rfl
   have hz : 3 * n * u * (m + 1) = z := by dsimp [z, v]; ac_rfl
   have h_u4 : 2 * u + 4 = 14 * v := by dsimp [u, v]; rw [Nat.mul_add 2 (21 * m) 19, ← Nat.mul_assoc 2 21 m, ← Nat.mul_assoc 14 3 (m + 1), Nat.mul_add 42 m 1]
   have h_n7 : 2 * n + 14 = 16 * u := by dsimp [n, u]; rw [Nat.mul_add 2 (168 * m) 145, Nat.mul_add 16 (21 * m) 19, ← Nat.mul_assoc 2 168 m, ← Nat.mul_assoc 16 21 m]
-
   have h_inner : y * z + (2 * u) * z + (2 * u) * y = n * u * v * (2 * n * v + (2 * u + 4)) := by
     dsimp [y, z]
     have t1 : (2 * n * v) * (n * u * v) = n * u * v * (2 * n * v) := by ac_rfl
     have t2 : (2 * u) * (n * u * v) = n * u * v * (2 * u) := by ac_rfl
-    have t3 : (2 * u) * (2 * n * v) = n * u * v * 4 := by
-      have e : (2 * u) * (2 * n * v) = n * u * v * (2 * 2) := by ac_rfl
-      rw [e]
+    have t3 : (2 * u) * (2 * n * v) = n * u * v * 4 := by have h4 : (4 : Nat) = 2 * 2 := rfl; rw [h4]; ac_rfl
     rw [t1, t2, t3, ← Nat.mul_add, ← Nat.mul_add, Nat.add_assoc]
   have h_factor : 2 * n * v + (2 * u + 4) = v * (2 * n + 14) := by
     rw [h_u4]
@@ -929,11 +922,8 @@ theorem erdosStrausMod168Eq145 (m : Nat) :
   rw [hx, hy, hz, h_inner, h_factor, h_n7]
   dsimp [y, z]
   have lhs : 4 * (2 * u) * (2 * n * v) * (n * u * v) = 16 * (n * n * u * u * v * v) := by
-    have e : 4 * (2 * u) * (2 * n * v) * (n * u * v) = (4 * 2 * 2) * (n * n * u * u * v * v) := by ac_rfl
-    rw [e]
-  have rhs : n * (n * u * v * (v * (16 * u))) = 16 * (n * n * u * u * v * v) := by
-    have e : n * (n * u * v * (v * (16 * u))) = 16 * (n * n * u * u * v * v) := by ac_rfl
-    rw [e]
+    have h16 : (16 : Nat) = 4 * 2 * 2 := rfl; rw [h16]; ac_rfl
+  have rhs : n * (n * u * v * (v * (16 * u))) = 16 * (n * n * u * u * v * v) := by ac_rfl
   rw [lhs, rhs]
 
 theorem erdosStrausPrimeTriple (p a b c : Nat)
