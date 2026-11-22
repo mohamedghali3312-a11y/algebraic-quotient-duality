@@ -578,13 +578,20 @@ theorem erdosStrausCase7 (n : Nat) (hn : 7 <= n) (h : n % 7 = 0) : HasErdosStrau
   exact ⟨2 * k, 15 * k, 210 * k,
     by omega, by omega, by omega, erdosStrausMod7Eq0 k⟩
 
- erdosStrausCase12_9 n h
+theorem erdosStrausUnifiedCoverage (n : Nat) (hn : 7 <= n)
+    (h_class : n % 2 = 0 ∨ n % 4 = 3 ∨ n % 12 = 9 ∨ n % 24 = 5 ∨ n % 24 = 13 ∨ n % 48 = 17 ∨ n % 5 = 0 ∨ n % 7 = 0) :
+    HasErdosStraus n := by
+  rcases h_class with h | h | h | h | h | h | h | h
+  case inl => exact erdosStrausCase2 n (by omega) h
+  case inr.inl => exact erdosStrausCase4_3 n h
+  case inr.inr.inl => exact erdosStrausCase12_9 n h
   case inr.inr.inr.inl => exact erdosStrausCase24_5 n h
   case inr.inr.inr.inr.inl => exact erdosStrausCase24_13 n h
   case inr.inr.inr.inr.inr.inl => exact erdosStrausCase48_17 n h
   case inr.inr.inr.inr.inr.inr.inl => exact erdosStrausCase5 n (by omega) h
   case inr.inr.inr.inr.inr.inr.inr => exact erdosStrausCase7 n hn h
 
+#print axioms erdosStrausUnifiedCoverage
 #print axioms abstractUnitModMul
 #print axioms bezoutImpliesUnitMod
 #print axioms spectralRegularizationDetBound
