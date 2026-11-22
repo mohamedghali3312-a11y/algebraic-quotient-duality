@@ -493,14 +493,13 @@ theorem erdosStrausMod7Eq0 (k : Nat) :
   rw [h_lhs, h_rhs, h_c1]
 
 def HasErdosStraus (n : Nat) : Prop :=
-  ∃ x y z : Nat, 0 < x ∧ 0 < y ∧ 0 < z ∧ 4 * x * y * z = n * (y * z + x * z + x * y)
-theorem erdosStrausCase2 (n : Nat) (hn : 2 ≤ n) (h : n % 2 = 0) : HasErdosStraus n := by
+
+theorem erdosStrausCase2 (n : Nat) (hn : 2 <= n) (h : n % 2 = 0) : HasErdosStraus n := by
   have h_dm := Nat.div_add_mod n 2
-  let k := n / 2
-  have hn_eq : n = 2 * k := by omega
-  refine ⟨k, 2 * k, 2 * k, by omega, by omega, by omega, ?_⟩
-  rw [hn_eq]
-  exact erdosStrausEven k
+  have hex : ∃ k, n = 2 * k := ⟨n / 2, by omega⟩
+  rcases hex with ⟨k, hn_eq⟩
+  subst hn_eq
+  exact ⟨k, 2 * k, 2 * k, by omega, by omega, by omega, erdosStrausEven k⟩
 
 theorem erdosStrausCase4_3 (n : Nat) (h : n % 4 = 3) : HasErdosStraus n := by
   have h_dm := Nat.div_add_mod n 4
