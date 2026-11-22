@@ -565,12 +565,6 @@ theorem erdosStrausCase48_17 (n : Nat) (h : n % 48 = 17) : HasErdosStraus n := b
   have hex : ∃ q, n = 48 * q + 17 := ⟨n / 48, by omega⟩
   rcases hex with ⟨q, hn_eq⟩
   subst hn_eq
-
-theorem erdosStrausCase48_17 (n : Nat) (h : n % 48 = 17) : HasErdosStraus n := by
-  have h_dm := Nat.div_add_mod n 48
-  have hex : ∃ q, n = 48 * q + 17 := ⟨n / 48, by omega⟩
-  rcases hex with ⟨q, hn_eq⟩
-  subst hn_eq
   have hy : 0 < (48 * q + 17) * (4 * q + 2) :=
     Nat.mul_pos (by omega) (by omega)
   have hz : 0 < (48 * q + 17) * (12 * q + 5) * (4 * q + 2) :=
