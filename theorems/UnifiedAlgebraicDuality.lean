@@ -552,17 +552,23 @@ theorem erdosStrausCase48_17 (n : Nat) (h : n % 48 = 17) : HasErdosStraus n := b
   rw [hn_eq]
   exact erdosStrausMod48Eq17 q
 
-theorem erdosStrausCase5 (n : Nat) (hn : 5 ≤ n) (h : n % 5 = 0) : HasErdosStraus n := by
+theorem erdosStrausCase5 (n : Nat) (hn : 5 <= n) (h : n % 5 = 0) : HasErdosStraus n := by
   have h_dm := Nat.div_add_mod n 5
   let k := n / 5
   have hn_eq : n = 5 * k := by omega
-  exact ⟨2 * k, 4 * k, 20 * k, by omega, by omega, by omega, hn_eq ▸ erdosStrausMod5Eq0 k⟩
+  have h_id := erdosStrausMod5Eq0 k
+  refine Exists.intro (2 * k) (Exists.intro (4 * k) (Exists.intro (20 * k) ?_))
+  refine And.intro (by omega) (And.intro (by omega) (And.intro (by omega) ?_))
+  exact Eq.subst hn_eq.symm h_id
 
-theorem erdosStrausCase7 (n : Nat) (hn : 7 ≤ n) (h : n % 7 = 0) : HasErdosStraus n := by
+theorem erdosStrausCase7 (n : Nat) (hn : 7 <= n) (h : n % 7 = 0) : HasErdosStraus n := by
   have h_dm := Nat.div_add_mod n 7
   let k := n / 7
   have hn_eq : n = 7 * k := by omega
-  exact ⟨2 * k, 15 * k, 210 * k, by omega, by omega, by omega, hn_eq ▸ erdosStrausMod7Eq0 k⟩
+  have h_id := erdosStrausMod7Eq0 k
+  refine Exists.intro (2 * k) (Exists.intro (15 * k) (Exists.intro (210 * k) ?_))
+  refine And.intro (by omega) (And.intro (by omega) (And.intro (by omega) ?_))
+  exact Eq.subst hn_eq.symm h_id
 
 theorem erdosStrausUnifiedCoverage (n : Nat) (hn : 7 ≤ n)
     (h_class : n % 2 = 0 ∨ n % 4 = 3 ∨ n % 12 = 9 ∨ n % 24 = 5 ∨ n % 24 = 13 ∨ n % 48 = 17 ∨ n % 5 = 0 ∨ n % 7 = 0) :
