@@ -525,6 +525,7 @@ theorem erdosStrausCase12_9 (n : Nat) (h : n % 12 = 9) : HasErdosStraus n := by
     by omega, hy, hz, erdosStrausMod12Eq9 k⟩
 
 theorem erdosStrausCase24_5 (n : Nat) (h : n % 24 = 5) : HasErdosStraus n := by
+  unfold HasErdosStraus
   have h_dm := Nat.div_add_mod n 24
   have hex : ∃ q, n = 24 * q + 5 := ⟨n / 24, by omega⟩
   rcases hex with ⟨q, hn_eq⟩
@@ -538,6 +539,7 @@ theorem erdosStrausCase24_5 (n : Nat) (h : n % 24 = 5) : HasErdosStraus n := by
     by omega, hy, hz, erdosStrausMod24Eq5 q⟩
 
 theorem erdosStrausCase24_13 (n : Nat) (h : n % 24 = 13) : HasErdosStraus n := by
+  unfold HasErdosStraus
   have h_dm := Nat.div_add_mod n 24
   have hex : ∃ q, n = 24 * q + 13 := ⟨n / 24, by omega⟩
   rcases hex with ⟨q, hn_eq⟩
@@ -551,6 +553,7 @@ theorem erdosStrausCase24_13 (n : Nat) (h : n % 24 = 13) : HasErdosStraus n := b
     by omega, hy, hz, erdosStrausMod24Eq13 q⟩
 
 theorem erdosStrausCase48_17 (n : Nat) (h : n % 48 = 17) : HasErdosStraus n := by
+  unfold HasErdosStraus
   have h_dm := Nat.div_add_mod n 48
   have hex : ∃ q, n = 48 * q + 17 := ⟨n / 48, by omega⟩
   rcases hex with ⟨q, hn_eq⟩
@@ -563,6 +566,7 @@ theorem erdosStrausCase48_17 (n : Nat) (h : n % 48 = 17) : HasErdosStraus n := b
     by omega, hy, hz, erdosStrausMod48Eq17 q⟩
 
 theorem erdosStrausCase5 (n : Nat) (hn : 5 <= n) (h : n % 5 = 0) : HasErdosStraus n := by
+  unfold HasErdosStraus
   have h_dm := Nat.div_add_mod n 5
   have hex : ∃ k, n = 5 * k := ⟨n / 5, by omega⟩
   rcases hex with ⟨k, hn_eq⟩
@@ -571,12 +575,14 @@ theorem erdosStrausCase5 (n : Nat) (hn : 5 <= n) (h : n % 5 = 0) : HasErdosStrau
     by omega, by omega, by omega, erdosStrausMod5Eq0 k⟩
 
 theorem erdosStrausCase7 (n : Nat) (hn : 7 <= n) (h : n % 7 = 0) : HasErdosStraus n := by
+  unfold HasErdosStraus
   have h_dm := Nat.div_add_mod n 7
   have hex : ∃ k, n = 7 * k := ⟨n / 7, by omega⟩
   rcases hex with ⟨k, hn_eq⟩
   subst hn_eq
   exact ⟨2 * k, 15 * k, 210 * k,
     by omega, by omega, by omega, erdosStrausMod7Eq0 k⟩
+
 
 theorem erdosStrausUnifiedCoverage (n : Nat) (hn : 7 <= n)
     (h_class : n % 2 = 0 ∨ n % 4 = 3 ∨ n % 12 = 9 ∨ n % 24 = 5 ∨ n % 24 = 13 ∨ n % 48 = 17 ∨ n % 5 = 0 ∨ n % 7 = 0) :
