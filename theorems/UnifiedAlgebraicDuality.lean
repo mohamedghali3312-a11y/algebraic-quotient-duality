@@ -1,6 +1,6 @@
 set_option linter.unusedVariables false
 structure RingProj (R Q : Type) [Add R] [Mul R] [Add Q] [Mul Q] where
-  toFun : R → Q
+  toFun : R →  
   map_add : ∀ a b : R, toFun (a + b) = toFun a + toFun b
   map_mul : ∀ a b : R, toFun (a * b) = toFun a * toFun b
 
