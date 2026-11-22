@@ -904,12 +904,10 @@ theorem erdosStrausMod168Eq145 (m : Nat) :
     dsimp [y, v]
     have e : 6 * n * (m + 1) = 2 * n * (3 * (m + 1)) := by have h6 : (6 : Nat) = 2 * 3 := rfl; rw [h6]; acac_rfl
     exact e
-    have hz : 3 * n * u * (m + 1) = z := by
-    dsimp [z, v]
-    have e : 3 * n * u * (m + 1) = n * u * (3 * (m + 1)) := by ac_rfl
-    exact e
-  have h_u4 : 2 * u + 4 = 14 * v := by dsimp [u, v]; omega
-  have h_n7 : 2 * n + 14 = 16 * u := by dsimp [n, u]; rw [Nat.mul_add 2 (168 * m) 145, Nat.mul_add 16 (21 * m) 19, ← Nat.mul_assoc 2 168 m, ← Nat.mul_assoc 16 21 m]; 
+ 
+  have hz : 3 * n * u * (m + 1) = z := by dsimp [z, v]; ac_rfl
+  have h_u4 : 2 * u + 4 = 14 * v := by dsimp [u, v]; rw [Nat.mul_add 2 (21 * m) 19, ← Nat.mul_assoc 2 21 m, ← Nat.mul_assoc 14 3 (m + 1), Nat.mul_add 42 m 1]
+  have h_n7 : 2 * n + 14 = 16 * u := by dsimp [n, u]; rw [Nat.mul_add 2 (168 * m) 145, Nat.mul_add 16 (21 * m) 19, ← Nat.mul_assoc 2 168 m, ← Nat.mul_assoc 16 21 m]
 
   have h_inner : y * z + (2 * u) * z + (2 * u) * y = n * u * v * (2 * n * v + (2 * u + 4)) := by
     dsimp [y, z]
