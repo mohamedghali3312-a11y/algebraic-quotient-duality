@@ -627,12 +627,6 @@ theorem erdosStrausUnifiedCoverage (n : Nat) (hn : 7 <= n)
 -- Extension v1.3.0 : Descente dyadique de Collatz modulo 128 et 256 (> 90 %)
 -- ============================================================================
 
-def collatzStep (n : Nat) : Nat :=
-  if n % 2 = 0 then n / 2 else 3 * n + 1
-
-def collatzIter : Nat -> Nat -> Nat
-  | 0, n => n
-  | k + 1, n => collatzIter k (collatzStep n)
 
 theorem collatzMod128Eq7Descent (m : Nat) :
     collatzIter 11 (128 * m + 7) < 128 * m + 7 := by
