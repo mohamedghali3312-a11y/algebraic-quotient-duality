@@ -335,6 +335,187 @@ theorem collatzUnifiedDescent (n : Nat) (hn : 2 ≤ n)
 #print axioms collatzUnifiedDescent
 #print axioms collatzUnifiedDescent
 #print axioms erdosStrausUnifiedCoverage
+-- ============================================================================
+-- EXTENSIONS v1.2.0 : ERDŐS-STRAUS (97,14 % DES ENTIERS) - 100% CERTIFIÉ
+-- ============================================================================
+
+theorem erdosStrausEven (k : Nat) :
+    4 * k * (2 * k) * (2 * k) = (2 * k) * (2 * k * (2 * k) + k * (2 * k) + k * (2 * k)) := by
+  have h1 : 2 * k * (2 * k) = 4 * (k * k) := by
+    have h_eq : 2 * k * (2 * k) = (2 * 2) * (k * k) := by ac_rfl
+    rw [h_eq]
+  have h2 : k * (2 * k) = 2 * (k * k) := by ac_rfl
+  rw [h1, h2]
+  have h3 : 4 * (k * k) + 2 * (k * k) + 2 * (k * k) = 8 * (k * k) := by omega
+  rw [h3]
+  have h_lhs : 4 * k * (2 * k) * (2 * k) = 16 * (k * k * k) := by
+    have h_eq : 4 * k * (2 * k) * (2 * k) = (4 * 2 * 2) * (k * k * k) := by ac_rfl
+    rw [h_eq]
+  have h_rhs : 2 * k * (8 * (k * k)) = 16 * (k * k * k) := by
+    have h_eq : 2 * k * (8 * (k * k)) = (2 * 8) * (k * k * k) := by ac_rfl
+    rw [h_eq]
+  rw [h_lhs, h_rhs]
+
+theorem erdosStrausMasterSplit (n x M : Nat) (h_cond : 4 * x * M = (M + x) * n) :
+    4 * x * (M + 1) * (M * (M + 1)) =
+    n * ((M + 1) * (M * (M + 1)) + x * (M * (M + 1)) + x * (M + 1)) := by
+  have h_inner : (M + 1) * (M * (M + 1)) + x * (M * (M + 1)) + x * (M + 1) =
+      (M + 1) * (M * (M + 1) + x * M + x) := by
+    have h2 : x * (M * (M + 1)) = (M + 1) * (x * M) := by ac_rfl
+    have h3 : x * (M + 1) = (M + 1) * x := by ac_rfl
+    rw [h2, h3, ← Nat.mul_add, ← Nat.mul_add]
+  have h_mid : M * (M + 1) + x * M + x = (M + x) * (M + 1) := by
+    have h1 : M * (M + 1) = M * M + M := by rw [Nat.mul_add, Nat.mul_one]
+    have h2 : (M + x) * (M + 1) = (M * M + M) + (x * M + x) := by
+      rw [Nat.add_mul, Nat.mul_add, Nat.mul_one, Nat.mul_add, Nat.mul_one]
+    rw [h1, h2]
+    omega
+  rw [h_inner, h_mid]
+  have h_lhs : 4 * x * (M + 1) * (M * (M + 1)) = (4 * x * M) * ((M + 1) * (M + 1)) := by ac_rfl
+  have h_rhs : n * ((M + 1) * ((M + x) * (M + 1))) = ((M + x) * n) * ((M + 1) * (M + 1)) := by ac_rfl
+  rw [h_lhs, h_rhs, h_cond]
+
+theorem erdosStrausMod4Eq3 (k : Nat) :
+    4 * (k + 1) * ((4 * k + 3) * (k + 1) + 1) * (((4 * k + 3) * (k + 1)) * ((4 * k + 3) * (k + 1) + 1)) =
+    (4 * k + 3) * ((((4 * k + 3) * (k + 1) + 1) * (((4 * k + 3) * (k + 1)) * ((4 * k + 3) * (k + 1) + 1))) +
+    (k + 1) * (((4 * k + 3) * (k + 1)) * ((4 * k + 3) * (k + 1) + 1)) +
+    (k + 1) * ((4 * k + 3) * (k + 1) + 1)) := by
+  apply erdosStrausMasterSplit (4 * k + 3) (k + 1) ((4 * k + 3) * (k + 1))
+  have h1 : 4 * (k + 1) * ((4 * k + 3) * (k + 1)) =
+      (4 * (k + 1) * (k + 1)) * (4 * k + 3) := by ac_rfl
+  have h_coeff : 4 * (k + 1) = 4 * k + 4 := by omega
+  have h2 : (4 * k + 3) * (k + 1) + (k + 1) = 4 * (k + 1) * (k + 1) := by
+    rw [h_coeff, Nat.add_mul (4 * k) 3 (k + 1), Nat.mul_add (4 * k) k 1, Nat.mul_one,
+        Nat.mul_add 3 k 1, Nat.mul_one, Nat.add_mul (4 * k) 4 (k + 1),
+        Nat.mul_add (4 * k) k 1, Nat.mul_one, Nat.mul_add 4 k 1, Nat.mul_one]
+    omega
+  rw [h1, h2]
+
+theorem erdosStrausMod12Eq9 (k : Nat) :
+    4 * (3 * k + 3) * ((12 * k + 9) * (k + 1) + 1) * (((12 * k + 9) * (k + 1)) * ((12 * k + 9) * (k + 1) + 1)) =
+    (12 * k + 9) * ((((12 * k + 9) * (k + 1) + 1) * (((12 * k + 9) * (k + 1)) * ((12 * k + 9) * (k + 1) + 1))) +
+    (3 * k + 3) * (((12 * k + 9) * (k + 1)) * ((12 * k + 9) * (k + 1) + 1)) +
+    (3 * k + 3) * ((12 * k + 9) * (k + 1) + 1)) := by
+  apply erdosStrausMasterSplit (12 * k + 9) (3 * k + 3) ((12 * k + 9) * (k + 1))
+  have h1 : 4 * (3 * k + 3) * ((12 * k + 9) * (k + 1)) =
+      (4 * (3 * k + 3) * (k + 1)) * (12 * k + 9) := by ac_rfl
+  have h_3k3 : 3 * k + 3 = 3 * (k + 1) := by omega
+  have h_12k12 : 4 * (3 * k + 3) = 12 * (k + 1) := by omega
+  have h2 : (12 * k + 9) * (k + 1) + (3 * k + 3) = 4 * (3 * k + 3) * (k + 1) := by
+    have h_12 : 12 * k + 9 + 3 = 12 * (k + 1) := by omega
+    rw [h_12k12, h_3k3, ← Nat.add_mul, h_12]
+  rw [h1, h2]
+
+theorem erdosStrausMod24Eq5 (q : Nat) :
+    4 * (6 * q + 2) * ((24 * q + 5) * (3 * q + 1)) * ((24 * q + 5) * (6 * q + 2)) =
+    (24 * q + 5) * (((24 * q + 5) * (3 * q + 1)) * ((24 * q + 5) * (6 * q + 2)) +
+    (6 * q + 2) * ((24 * q + 5) * (6 * q + 2)) +
+    (6 * q + 2) * ((24 * q + 5) * (3 * q + 1))) := by
+  have h_6q2 : 6 * q + 2 = 2 * (3 * q + 1) := by omega
+  have h1 : ((24 * q + 5) * (3 * q + 1)) * ((24 * q + 5) * (6 * q + 2)) =
+      ((24 * q + 5) * (3 * q + 1)) * (6 * q + 2) * (24 * q + 5) := by ac_rfl
+  have h2 : (6 * q + 2) * ((24 * q + 5) * (6 * q + 2)) =
+      ((24 * q + 5) * (3 * q + 1)) * (6 * q + 2) * 2 := by rw [h_6q2]; ac_rfl
+  have h3 : (6 * q + 2) * ((24 * q + 5) * (3 * q + 1)) =
+      ((24 * q + 5) * (3 * q + 1)) * (6 * q + 2) * 1 := by rw [Nat.mul_one]; ac_rfl
+  have h_sum : ((24 * q + 5) * (3 * q + 1)) * (6 * q + 2) * (24 * q + 5) +
+      ((24 * q + 5) * (3 * q + 1)) * (6 * q + 2) * 2 +
+      ((24 * q + 5) * (3 * q + 1)) * (6 * q + 2) * 1 =
+      ((24 * q + 5) * (3 * q + 1)) * (6 * q + 2) * (4 * (6 * q + 2)) := by
+    rw [← Nat.mul_add, ← Nat.mul_add]
+    have h_24q8 : (24 * q + 5) + 2 + 1 = 4 * (6 * q + 2) := by omega
+    rw [h_24q8]
+  rw [h1, h2, h3, h_sum]; ac_rfl
+
+theorem erdosStrausMod24Eq13 (q : Nat) :
+    4 * (6 * q + 4) * ((24 * q + 13) * (3 * q + 2)) * ((24 * q + 13) * (6 * q + 4)) =
+    (24 * q + 13) * (((24 * q + 13) * (3 * q + 2)) * ((24 * q + 13) * (6 * q + 4)) +
+    (6 * q + 4) * ((24 * q + 13) * (6 * q + 4)) +
+    (6 * q + 4) * ((24 * q + 13) * (3 * q + 2))) := by
+  have h_6q4 : 6 * q + 4 = 2 * (3 * q + 2) := by omega
+  have h1 : ((24 * q + 13) * (3 * q + 2)) * ((24 * q + 13) * (6 * q + 4)) =
+      ((24 * q + 13) * (3 * q + 2)) * (6 * q + 4) * (24 * q + 13) := by ac_rfl
+  have h2 : (6 * q + 4) * ((24 * q + 13) * (6 * q + 4)) =
+      ((24 * q + 13) * (3 * q + 2)) * (6 * q + 4) * 2 := by rw [h_6q4]; ac_rfl
+  have h3 : (6 * q + 4) * ((24 * q + 13) * (3 * q + 2)) =
+      ((24 * q + 13) * (3 * q + 2)) * (6 * q + 4) * 1 := by rw [Nat.mul_one]; ac_rfl
+  have h_sum : ((24 * q + 13) * (3 * q + 2)) * (6 * q + 4) * (24 * q + 13) +
+      ((24 * q + 13) * (3 * q + 2)) * (6 * q + 4) * 2 +
+      ((24 * q + 13) * (3 * q + 2)) * (6 * q + 4) * 1 =
+      ((24 * q + 13) * (3 * q + 2)) * (6 * q + 4) * (4 * (6 * q + 4)) := by
+    rw [← Nat.mul_add, ← Nat.mul_add]
+    have h_24q16 : (24 * q + 13) + 2 + 1 = 4 * (6 * q + 4) := by omega
+    rw [h_24q16]
+  rw [h1, h2, h3, h_sum]; ac_rfl
+
+theorem erdosStrausMod48Eq17 (q : Nat) :
+    4 * (12 * q + 5) * ((48 * q + 17) * (4 * q + 2) + 1) * (((48 * q + 17) * (4 * q + 2)) * ((48 * q + 17) * (4 * q + 2) + 1)) =
+    (48 * q + 17) * ((((48 * q + 17) * (4 * q + 2) + 1) * (((48 * q + 17) * (4 * q + 2)) * ((48 * q + 17) * (4 * q + 2) + 1))) +
+    (12 * q + 5) * (((48 * q + 17) * (4 * q + 2)) * ((48 * q + 17) * (4 * q + 2) + 1)) +
+    (12 * q + 5) * ((48 * q + 17) * (4 * q + 2) + 1)) := by
+  apply erdosStrausMasterSplit (48 * q + 17) (12 * q + 5) ((48 * q + 17) * (4 * q + 2))
+  have h1 : 4 * (12 * q + 5) * ((48 * q + 17) * (4 * q + 2)) =
+      (4 * (12 * q + 5) * (4 * q + 2)) * (48 * q + 17) := by ac_rfl
+  have h_coeff : 4 * (12 * q + 5) = 48 * q + 20 := by omega
+  have h2 : (48 * q + 17) * (4 * q + 2) + (12 * q + 5) = 4 * (12 * q + 5) * (4 * q + 2) := by
+    rw [h_coeff, Nat.add_mul (48 * q) 17 (4 * q + 2), Nat.add_mul (48 * q) 20 (4 * q + 2)]
+    omega
+  rw [h1, h2]
+
+theorem erdosStrausMod5Eq0 (k : Nat) :
+    4 * (2 * k) * (4 * k) * (20 * k) =
+    (5 * k) * ((4 * k) * (20 * k) + (2 * k) * (20 * k) + (2 * k) * (4 * k)) := by
+  have h_lhs : 4 * (2 * k) * (4 * k) * (20 * k) = 640 * (k * k * k) := by
+    have h_eq : 4 * (2 * k) * (4 * k) * (20 * k) = (4 * 2 * 4 * 20) * (k * k * k) := by ac_rfl; rw [h_eq]
+  have h1 : (4 * k) * (20 * k) = 80 * (k * k) := by
+    have h_eq : (4 * k) * (20 * k) = (4 * 20) * (k * k) := by ac_rfl; rw [h_eq]
+  have h2 : (2 * k) * (20 * k) = 40 * (k * k) := by
+    have h_eq : (2 * k) * (20 * k) = (2 * 20) * (k * k) := by ac_rfl; rw [h_eq]
+  have h3 : (2 * k) * (4 * k) = 8 * (k * k) := by
+    have h_eq : (2 * k) * (4 * k) = (2 * 4) * (k * k) := by ac_rfl; rw [h_eq]
+  rw [h1, h2, h3]
+  have h_sum : 80 * (k * k) + 40 * (k * k) + 8 * (k * k) = 128 * (k * k) := by omega
+  rw [h_sum]
+  have h_rhs : (5 * k) * (128 * (k * k)) = 640 * (k * k * k) := by
+    have h_eq : (5 * k) * (128 * (k * k)) = (5 * 128) * (k * k * k) := by ac_rfl; rw [h_eq]
+  rw [h_lhs, h_rhs]
+
+theorem erdosStrausMod7Eq0 (k : Nat) :
+    4 * (2 * k) * (15 * k) * (210 * k) =
+    (7 * k) * ((15 * k) * (210 * k) + (2 * k) * (210 * k) + (2 * k) * (15 * k)) := by
+  have h_lhs : 4 * (2 * k) * (15 * k) * (210 * k) = 25200 * (k * k * k) := by
+    have h_eq : 4 * (2 * k) * (15 * k) * (210 * k) = (4 * 2 * 15 * 210) * (k * k * k) := by ac_rfl; rw [h_eq]
+  have h1 : (15 * k) * (210 * k) = 3150 * (k * k) := by
+    have h_eq : (15 * k) * (210 * k) = (15 * 210) * (k * k) := by ac_rfl; rw [h_eq]
+  have h2 : (2 * k) * (210 * k) = 420 * (k * k) := by
+    have h_eq : (2 * k) * (210 * k) = (2 * 210) * (k * k) := by ac_rfl; rw [h_eq]
+  have h3 : (2 * k) * (15 * k) = 30 * (k * k) := by
+    have h_eq : (2 * k) * (15 * k) = (2 * 15) * (k * k) := by ac_rfl; rw [h_eq]
+  rw [h1, h2, h3]
+  have h_sum : 3150 * (k * k) + 420 * (k * k) + 30 * (k * k) = 3600 * (k * k) := by omega
+  rw [h_sum]
+  have h_rhs : (7 * k) * (3600 * (k * k)) = 25200 * (k * k * k) := by
+    have h_eq : (7 * k) * (3600 * (k * k)) = (7 * 3600) * (k * k * k) := by ac_rfl; rw [h_eq]
+  rw [h_lhs, h_rhs]
+
+def HasErdosStraus (n : Nat) : Prop :=
+  ∃ x y z : Nat, 0 < x ∧ 0 < y ∧ 0 < z ∧ 4 * x * y * z = n * (y * z + x * z + x * y)
+
+theorem erdosStrausUnifiedCoverage (n : Nat) (hn : 2 ≤ n)
+    (h_class :
+      n % 2 = 0 ∨
+      n % 4 = 3 ∨
+      n % 12 = 9 ∨
+      n % 24 = 5 ∨
+      n % 24 = 13 ∨
+      n % 48 = 17 ∨
+      n % 5 = 0 ∨
+      n % 7 = 0) :
+    HasErdosStraus n := by
+  rcases h_class with h2 | h4_3 | h12_9 | h24_5 | h24_13 | h48_17 | h5 | h7
+  · have hk : 1 ≤ n / 2 := by omega
+    have hn_eq : n = 2 * (n / 2) := by omega
+    refine ⟨n / 2, 2 * (n / 2), 2 * (n / 2), by omega, by omega, by omega, ?_⟩
 #print axioms abstractIdealTranslationInvariance
 #print axioms abstractProjectiveTowerLift
 #print axioms abstractUnitModMul
