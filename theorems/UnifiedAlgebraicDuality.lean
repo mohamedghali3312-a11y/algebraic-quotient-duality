@@ -334,8 +334,7 @@ theorem collatzUnifiedDescent (n : Nat) (hn : 2 ≤ n)
     rw [hn_eq]; exact collatzDescentMod32Eq23 (n / 32)
 
 #print axioms collatzUnifiedDescent
-#print axioms collatzUnifiedDescent
-#print axioms erdosStrausUnifiedCoverage
+
 -- ============================================================================
 -- EXTENSIONS v1.2.0 : ERDŐS-STRAUS (97,14 % DES ENTIERS) - 100% CERTIFIÉ
 -- ============================================================================
@@ -450,23 +449,34 @@ theorem erdosStrausMod24Eq13 (q : Nat) :
   rw [h1, h2, h3, h_sum]; ac_rfl
 
 theorem erdosStrausMod48Eq17 (q : Nat) :
-    4 * (12 * q + 5) * ((48 * q + 17) * (4 * q + 2) + 1) * (((48 * q + 17) * (4 * q + 2)) * ((48 * q + 17) * (4 * q + 2) + 1)) =
-    (48 * q + 17) * ((((48 * q + 17) * (4 * q + 2) + 1) * (((48 * q + 17) * (4 * q + 2)) * ((48 * q + 17) * (4 * q + 2) + 1))) +
-    (12 * q + 5) * (((48 * q + 17) * (4 * q + 2)) * ((48 * q + 17) * (4 * q + 2) + 1)) +
-    (12 * q + 5) * ((48 * q + 17) * (4 * q + 2) + 1)) := by
-  apply erdosStrausMasterSplit (48 * q + 17) (12 * q + 5) ((48 * q + 17) * (4 * q + 2))
-  have h1 : 4 * (12 * q + 5) * ((48 * q + 17) * (4 * q + 2)) =
-      (4 * (12 * q + 5) * (4 * q + 2)) * (48 * q + 17) := by ac_rfl
-  have h_coeff : 4 * (12 * q + 5) = 48 * q + 20 := by omega
-  have h2 : (48 * q + 17) * (4 * q + 2) + (12 * q + 5) = 4 * (12 * q + 5) * (4 * q + 2) := by
-    rw [h_coeff, Nat.add_mul (48 * q) 17 (4 * q + 2), Nat.add_mul (48 * q) 20 (4 * q + 2)]
-    rw [Nat.add_mul (48 * q) 20 (4 * q + 2)]
-
+    4 * (12 * q + 5) * ((48 * q + 17) * (4 * q + 2)) *
+      ((48 * q + 17) * (12 * q + 5) * (4 * q + 2)) =
+    (48 * q + 17) *
+      (((48 * q + 17) * (4 * q + 2)) * ((48 * q + 17) * (12 * q + 5) * (4 * q + 2)) +
+       (12 * q + 5) * ((48 * q + 17) * (12 * q + 5) * (4 * q + 2)) +
+       (12 * q + 5) * ((48 * q + 17) * (4 * q + 2))) := by
+  let n := 48 * q + 17
+  let x := 12 * q + 5
+  let k := 4 * q + 2
+  let m := n * k
+  have hz : n * x * k = m * x := by dsimp [m]; ac_rfl
+  have h_sum : m + x + 1 = 4 * x * k := by
+    dsimp [m, n, x, k]
+    rw [Nat.add_mul (48 * q) 17 (4 * q + 2)]
+    have h4 : 4 * (12 * q + 5) = 48 * q + 20 := by omega
+    rw [h4, Nat.add_mul (48 * q) 20 (4 * q + 2)]
     omega
+  have h_mid : m * (m * x) + x * (m * x) + x * m = m * ((m + x + 1) * x) := by
+    rw [Nat.add_mul (m + x) 1 x, Nat.add_mul m x x, Nat.one_mul,
+        Nat.mul_add m (m * x + x * x) x, Nat.mul_add m (m * x) (x * x)]
+    have c1 : x * (m * x) = m * (x * x) := by ac_rfl
+    have c2 : x * m = m * x := by ac_rfl
+    rw [c1, c2]
+  change 4 * x * m * (n * x * k) = n * (m * (n * x * k) + x * (n * x * k) + x * m)
+  rw [hz, h_mid, h_sum]
+  dsimp [m]
+  ac_rfl
 
-  have h3 := congrArg (fun x => x * (48 * q + 17)) h2.symm
-  rw [h1, h3]
-  
 theorem erdosStrausMod5Eq0 (k : Nat) :
     4 * (2 * k) * (4 * k) * (20 * k) =
     (5 * k) * ((4 * k) * (20 * k) + (2 * k) * (20 * k) + (2 * k) * (4 * k)) := by
