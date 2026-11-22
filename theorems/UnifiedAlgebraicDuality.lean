@@ -462,7 +462,8 @@ theorem erdosStrausMod48Eq17 (q : Nat) :
     rw [h_coeff, Nat.add_mul (48 * q) 17 (4 * q + 2), Nat.add_mul (48 * q) 20 (4 * q + 2)]
     omega
 
-    rw [h1]; conv_rhs => arg 1; rw [h2]
+  have h3 := congrArg (fun x => x * (48 * q + 17)) h2.symm
+  rw [h1, h3]
   ac_rfl
 
 theorem erdosStrausMod5Eq0 (k : Nat) :
