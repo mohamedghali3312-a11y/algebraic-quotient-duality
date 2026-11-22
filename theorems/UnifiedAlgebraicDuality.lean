@@ -480,6 +480,7 @@ theorem erdosStrausMod5Eq0 (k : Nat) :
 theorem erdosStrausMod7Eq0 (k : Nat) :
     4 * (2 * k) * (15 * k) * (210 * k) =
     (7 * k) * ((15 * k) * (210 * k) + (2 * k) * (210 * k) + (2 * k) * (15 * k)) := by
+
   
   have h1 : (15 * k) * (210 * k) + (2 * k) * (210 * k) + (2 * k) * (15 * k) = 3600 * (k * k) := by
     have e1 : (15 * k) * (210 * k) = 3150 * (k * k) := by ac_rfl
@@ -493,6 +494,8 @@ theorem erdosStrausMod7Eq0 (k : Nat) :
   rw [h_lhs, h_rhs, h_c1]
 
 def HasErdosStraus (n : Nat) : Prop :=
+  ∃ x y z : Nat, 0 < x ∧ 0 < y ∧ 0 < z ∧
+    4 * x * y * z = n * (y * z + x * z + x * y)
 
 theorem erdosStrausCase2 (n : Nat) (hn : 2 <= n) (h : n % 2 = 0) : HasErdosStraus n := by
   have h_dm := Nat.div_add_mod n 2
