@@ -551,22 +551,21 @@ theorem erdosStrausCase48_17 (n : Nat) (h : n % 48 = 17) : HasErdosStraus n := b
   refine ⟨12 * q + 5, (48 * q + 17) * (4 * q + 2) + 1, ((48 * q + 17) * (4 * q + 2)) * ((48 * q + 17) * (4 * q + 2) + 1), by omega, by omega, hz, ?_⟩
   rw [hn_eq]
   exact erdosStrausMod48Eq17 q
-
 theorem erdosStrausCase5 (n : Nat) (hn : 5 <= n) (h : n % 5 = 0) : HasErdosStraus n := by
   have h_dm := Nat.div_add_mod n 5
   let k := n / 5
   have hn_eq : n = 5 * k := by omega
-  have h_id := erdosStrausMod5Eq0 k
-  have h_congr := congrArg (fun x => x * ((4 * k) * (20 * k) + (2 * k) * (20 * k) + (2 * k) * (4 * k))) hn_eq.symm
-  exact ⟨2 * k, 4 * k, 20 * k, by omega, by omega, by omega, Eq.trans h_id h_congr⟩
+  refine ⟨2 * k, 4 * k, 20 * k, by omega, by omega, by omega, ?_⟩
+  rw [hn_eq]
+  exact erdosStrausMod5Eq0 k
 
 theorem erdosStrausCase7 (n : Nat) (hn : 7 <= n) (h : n % 7 = 0) : HasErdosStraus n := by
   have h_dm := Nat.div_add_mod n 7
   let k := n / 7
   have hn_eq : n = 7 * k := by omega
-  have h_id := erdosStrausMod7Eq0 k
-  have h_congr := congrArg (fun x => x * ((15 * k) * (210 * k) + (2 * k) * (210 * k) + (2 * k) * (15 * k))) hn_eq.symm
-  exact ⟨2 * k, 15 * k, 210 * k, by omega, by omega, by omega, Eq.trans h_id h_congr⟩
+  refine ⟨2 * k, 15 * k, 210 * k, by omega, by omega, by omega, ?_⟩
+  rw [hn_eq]
+  exact erdosStrausMod7Eq0 k
 
 theorem erdosStrausUnifiedCoverage (n : Nat) (hn : 7 ≤ n)
     (h_class : n % 2 = 0 ∨ n % 4 = 3 ∨ n % 12 = 9 ∨ n % 24 = 5 ∨ n % 24 = 13 ∨ n % 48 = 17 ∨ n % 5 = 0 ∨ n % 7 = 0) :
