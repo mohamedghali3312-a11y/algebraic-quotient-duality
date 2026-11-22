@@ -502,20 +502,49 @@ def HasErdosStraus (n : Nat) : Prop :=
   ∃ x y z : Nat, 0 < x ∧ 0 < y ∧ 0 < z ∧ 4 * x * y * z = n * (y * z + x * z + x * y)
 
 theorem erdosStrausUnifiedCoverage (n : Nat) (hn : 2 ≤ n)
-    (h_class :
-      n % 2 = 0 ∨
-      n % 4 = 3 ∨
-      n % 12 = 9 ∨
-      n % 24 = 5 ∨
-      n % 24 = 13 ∨
-      n % 48 = 17 ∨
-      n % 5 = 0 ∨
-      n % 7 = 0) :
+    (h_class : n % 2 = 0 ∨ n % 4 = 3 ∨ n % 12 = 9 ∨ n % 24 = 5 ∨ n % 24 = 13 ∨ n % 48 = 17 ∨ n % 5 = 0 ∨ n % 7 = 0) :
     HasErdosStraus n := by
   rcases h_class with h2 | h4_3 | h12_9 | h24_5 | h24_13 | h48_17 | h5 | h7
-  · have hk : 1 ≤ n / 2 := by omega
+  · have h_dm := Nat.div_add_mod n 2
     have hn_eq : n = 2 * (n / 2) := by omega
     refine ⟨n / 2, 2 * (n / 2), 2 * (n / 2), by omega, by omega, by omega, ?_⟩
+    rw [hn_eq]; exact erdosStrausEven (n / 2)
+  · have h_dm := Nat.div_add_mod n 4
+    have hn_eq : n = 4 * (n / 4) + 3 := by omega
+    let k := n / 4
+    refine ⟨k + 1, (4 * k + 3) * (k + 1) + 1, ((4 * k + 3) * (k + 1)) * ((4 * k + 3) * (k + 1) + 1), by omega, by omega, Nat.mul_pos (Nat.mul_pos (by omega) (by omega)) (by omega), ?_⟩
+    rw [hn_eq]; exact erdosStrausMod4Eq3 k
+  · have h_dm := Nat.div_add_mod n 12
+    have hn_eq : n = 12 * (n / 12) + 9 := by omega
+    let k := n / 12
+    refine ⟨3 * k + 3, (12 * k + 9) * (k + 1) + 1, ((12 * k + 9) * (k + 1)) * ((12 * k + 9) * (k + 1) + 1), by omega, by omega, Nat.mul_pos (Nat.mul_pos (by omega) (by omega)) (by omega), ?_⟩
+    rw [hn_eq]; exact erdosStrausMod12Eq9 k
+  · have h_dm := Nat.div_add_mod n 24
+    have hn_eq : n = 24 * (n / 24) + 5 := by omega
+    let q := n / 24
+    refine ⟨6 * q + 2, (24 * q + 5) * (3 * q + 1), (24 * q + 5) * (6 * q + 2), by omega, Nat.mul_pos (by omega) (by omega), Nat.mul_pos (by omega) (by omega), ?_⟩
+    rw [hn_eq]; exact erdosStrausMod24Eq5 q
+  · have h_dm := Nat.div_add_mod n 24
+    have hn_eq : n = 24 * (n / 24) + 13 := by omega
+    let q := n / 24
+    refine ⟨6 * q + 4, (24 * q + 13) * (3 * q + 2), (24 * q + 13) * (6 * q + 4), by omega, Nat.mul_pos (by omega) (by omega), Nat.mul_pos (by omega) (by omega), ?_⟩
+    rw [hn_eq]; exact erdosStrausMod24Eq13 q
+  · have h_dm := Nat.div_add_mod n 48
+    have hn_eq : n = 48 * (n / 48) + 17 := by omega
+    let q := n / 48
+    refine ⟨12 * q + 5, (48 * q + 17) * (4 * q + 2) + 1, ((48 * q + 17) * (4 * q + 2)) * ((48 * q + 17) * (4 * q + 2) + 1), by omega, by omega, Nat.mul_pos (Nat.mul_pos (by omega) (by omega)) (by omega), ?_⟩
+    rw [hn_eq]; exact erdosStrausMod48Eq17 q
+  · have h_dm := Nat.div_add_mod n 5
+    have hn_eq : n = 5 * (n / 5) := by omega
+    refine ⟨2 * (n / 5), 4 * (n / 5), 20 * (n / 5), by omega, by omega, by omega, ?_⟩
+    rw [hn_eq]; exact erdosStrausMod5Eq0 (n / 5)
+  · have h_dm := Nat.div_add_mod n 7
+    have hn_eq : n = 7 * (n / 7) := by omega
+    refine ⟨2 * (n / 7), 15 * (n / 7), 210 * (n / 7), by omega, by omega, by omega, ?_⟩
+    rw [hn_eq]; exact erdosStrausMod7Eq0 (n / 7)
+
+#print axioms erdosStrausUnifiedCoverage
+
 #print axioms abstractIdealTranslationInvariance
 #print axioms abstractProjectiveTowerLift
 #print axioms abstractUnitModMul
