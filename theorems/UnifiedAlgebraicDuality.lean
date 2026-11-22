@@ -460,6 +460,7 @@ theorem erdosStrausMod48Eq17 (q : Nat) :
   have h_coeff : 4 * (12 * q + 5) = 48 * q + 20 := by omega
   have h2 : (48 * q + 17) * (4 * q + 2) + (12 * q + 5) = 4 * (12 * q + 5) * (4 * q + 2) := by
     rw [h_coeff, Nat.add_mul (48 * q) 17 (4 * q + 2), Nat.add_mul (48 * q) 20 (4 * q + 2)]
+    rw [Nat.add_mul (48 * q) 20 (4 * q + 2)]
 
     omega
 
