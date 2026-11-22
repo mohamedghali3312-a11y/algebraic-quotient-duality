@@ -476,7 +476,7 @@ theorem erdosStrausMod5Eq0 (k : Nat) :
   have h_c1 : 4 * 2 * 4 * 20 = 5 * 128 := rfl
   have h_lhs : 4 * (2 * k) * (4 * k) * (20 * k) = (4 * 2 * 4 * 20) * (k * k * k) := by ac_rfl
   have h_rhs : (5 * k) * (128 * (k * k)) = (5 * 128) * (k * k * k) := by ac_rfl
-    rw [h_lhs, h_rhs, h_c1]
+  rw [h_lhs, h_rhs, h_c1]
 
 theorem erdosStrausMod7Eq0 (k : Nat) :
     4 * (2 * k) * (15 * k) * (210 * k) =
