@@ -553,10 +553,15 @@ theorem erdosStrausCase48_17 (n : Nat) (h : n % 48 = 17) : HasErdosStraus n := b
   exact erdosStrausMod48Eq17 q
 
 theorem erdosStrausCase5 (n : Nat) (hn : 5 <= n) (h : n % 5 = 0) : HasErdosStraus n := by
+
+theorem erdosStrausCase5 (n : Nat) (hn : 5 <= n) (h : n % 5 = 0) : HasErdosStraus n := by
   have h_dm := Nat.div_add_mod n 5
   let k := n / 5
   have hn_eq : n = 5 * k := by omega
-  refine ⟨2 * k, 4 * k, 20 * k,by omega, by omega, by omega, ?_⟩
+  apply Exists.intro (2 * k)
+  apply Exists.intro (4 * k)
+  apply Exists.intro (20 * k)
+  refine ⟨by omega, by omega, by omega, ?_⟩
   rw [hn_eq]
   exact erdosStrausMod5Eq0 k
 
@@ -564,7 +569,10 @@ theorem erdosStrausCase7 (n : Nat) (hn : 7 <= n) (h : n % 7 = 0) : HasErdosStrau
   have h_dm := Nat.div_add_mod n 7
   let k := n / 7
   have hn_eq : n = 7 * k := by omega
-  refine ⟨2 * k, 15 * k, 210 * k,by omega, by omega, by omega, ?_⟩
+  apply Exists.intro (2 * k)
+  apply Exists.intro (15 * k)
+  apply Exists.intro (210 * k)
+  refine ⟨by omega, by omega, by omega, ?_⟩
   rw [hn_eq]
   exact erdosStrausMod7Eq0 k
 
