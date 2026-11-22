@@ -461,8 +461,8 @@ theorem erdosStrausMod48Eq17 (q : Nat) :
   have h2 : (48 * q + 17) * (4 * q + 2) + (12 * q + 5) = 4 * (12 * q + 5) * (4 * q + 2) := by
     rw [h_coeff, Nat.add_mul (48 * q) 17 (4 * q + 2), Nat.add_mul (48 * q) 20 (4 * q + 2)]
     omega
-   rw [h1, ← h2]
 
+    rw [h1, h2]; ac_rfl
 
 theorem erdosStrausMod5Eq0 (k : Nat) :
     4 * (2 * k) * (4 * k) * (20 * k) =
