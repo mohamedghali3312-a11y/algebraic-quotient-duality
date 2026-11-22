@@ -493,7 +493,6 @@ theorem erdosStrausMod7Eq0 (k : Nat) :
 
 def HasErdosStraus (n : Nat) : Prop :=
   ∃ x y z : Nat, 0 < x ∧ 0 < y ∧ 0 < z ∧ 4 * x * y * z = n * (y * z + x * z + x * y)
-
 theorem erdosStrausUnifiedCoverage (n : Nat) (hn : 2 ≤ n)
     (h_class : n % 2 = 0 ∨ n % 4 = 3 ∨ n % 12 = 9 ∨ n % 24 = 5 ∨ n % 24 = 13 ∨ n % 48 = 17 ∨ n % 5 = 0 ∨ n % 7 = 0) :
     HasErdosStraus n := by
@@ -506,27 +505,37 @@ theorem erdosStrausUnifiedCoverage (n : Nat) (hn : 2 ≤ n)
   · have h_dm := Nat.div_add_mod n 4
     let k := n / 4
     have hn_eq : n = 4 * k + 3 := by omega
-    refine ⟨k + 1, (4 * k + 3) * (k + 1) + 1, ((4 * k + 3) * (k + 1)) * ((4 * k + 3) * (k + 1) + 1), by omega, by omega, Nat.mul_pos (Nat.mul_pos (by omega) (by omega)) (by omega), ?_⟩
+    have hz : 0 < ((4 * k + 3) * (k + 1)) * ((4 * k + 3) * (k + 1) + 1) :=
+      Nat.mul_pos (Nat.mul_pos (by omega) (by omega)) (by omega)
+    refine ⟨k + 1, (4 * k + 3) * (k + 1) + 1, ((4 * k + 3) * (k + 1)) * ((4 * k + 3) * (k + 1) + 1), by omega, by omega, hz, ?_⟩
     rw [hn_eq]; exact erdosStrausMod4Eq3 k
   · have h_dm := Nat.div_add_mod n 12
     let k := n / 12
     have hn_eq : n = 12 * k + 9 := by omega
-    refine ⟨3 * k + 3, (12 * k + 9) * (k + 1) + 1, ((12 * k + 9) * (k + 1)) * ((12 * k + 9) * (k + 1) + 1), by omega, by omega, Nat.mul_pos (Nat.mul_pos (by omega) (by omega)) (by omega), ?_⟩
+    have hz : 0 < ((12 * k + 9) * (k + 1)) * ((12 * k + 9) * (k + 1) + 1) :=
+      Nat.mul_pos (Nat.mul_pos (by omega) (by omega)) (by omega)
+    refine ⟨3 * k + 3, (12 * k + 9) * (k + 1) + 1, ((12 * k + 9) * (k + 1)) * ((12 * k + 9) * (k + 1) + 1), by omega, by omega, hz, ?_⟩
     rw [hn_eq]; exact erdosStrausMod12Eq9 k
   · have h_dm := Nat.div_add_mod n 24
     let q := n / 24
     have hn_eq : n = 24 * q + 5 := by omega
-    refine ⟨6 * q + 2, (24 * q + 5) * (3 * q + 1), (24 * q + 5) * (6 * q + 2), by omega, Nat.mul_pos (by omega) (by omega), Nat.mul_pos (by omega) (by omega), ?_⟩
+    have hy : 0 < (24 * q + 5) * (3 * q + 1) := Nat.mul_pos (by omega) (by omega)
+    have hz : 0 < (24 * q + 5) * (6 * q + 2) := Nat.mul_pos (by omega) (by omega)
+    refine ⟨6 * q + 2, (24 * q + 5) * (3 * q + 1), (24 * q + 5) * (6 * q + 2), by omega, hy, hz, ?_⟩
     rw [hn_eq]; exact erdosStrausMod24Eq5 q
   · have h_dm := Nat.div_add_mod n 24
     let q := n / 24
     have hn_eq : n = 24 * q + 13 := by omega
-    refine ⟨6 * q + 4, (24 * q + 13) * (3 * q + 2), (24 * q + 13) * (6 * q + 4), by omega, Nat.mul_pos (by omega) (by omega), Nat.mul_pos (by omega) (by omega), ?_⟩
+    have hy : 0 < (24 * q + 13) * (3 * q + 2) := Nat.mul_pos (by omega) (by omega)
+    have hz : 0 < (24 * q + 13) * (6 * q + 4) := Nat.mul_pos (by omega) (by omega)
+    refine ⟨6 * q + 4, (24 * q + 13) * (3 * q + 2), (24 * q + 13) * (6 * q + 4), by omega, hy, hz, ?_⟩
     rw [hn_eq]; exact erdosStrausMod24Eq13 q
   · have h_dm := Nat.div_add_mod n 48
     let q := n / 48
     have hn_eq : n = 48 * q + 17 := by omega
-    refine ⟨12 * q + 5, (48 * q + 17) * (4 * q + 2) + 1, ((48 * q + 17) * (4 * q + 2)) * ((48 * q + 17) * (4 * q + 2) + 1), by omega, by omega, Nat.mul_pos (Nat.mul_pos (by omega) (by omega)) (by omega), ?_⟩
+    have hz : 0 < ((48 * q + 17) * (4 * q + 2)) * ((48 * q + 17) * (4 * q + 2) + 1) :=
+      Nat.mul_pos (Nat.mul_pos (by omega) (by omega)) (by omega)
+    refine ⟨12 * q + 5, (48 * q + 17) * (4 * q + 2) + 1, ((48 * q + 17) * (4 * q + 2)) * ((48 * q + 17) * (4 * q + 2) + 1), by omega, by omega, hz, ?_⟩
     rw [hn_eq]; exact erdosStrausMod48Eq17 q
   · have h_dm := Nat.div_add_mod n 5
     let k := n / 5
@@ -539,10 +548,6 @@ theorem erdosStrausUnifiedCoverage (n : Nat) (hn : 2 ≤ n)
     refine ⟨2 * k, 15 * k, 210 * k, by omega, by omega, by omega, ?_⟩
     rw [hn_eq]; exact erdosStrausMod7Eq0 k
 
-#print axioms erdosStrausUnifiedCoverage
-
-#print axioms abstractIdealTranslationInvariance
-#print axioms abstractProjectiveTowerLift
 #print axioms abstractUnitModMul
 #print axioms bezoutImpliesUnitMod
 #print axioms spectralRegularizationDetBound
