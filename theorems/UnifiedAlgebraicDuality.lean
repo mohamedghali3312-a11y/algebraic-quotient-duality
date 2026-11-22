@@ -883,3 +883,135 @@ theorem erdosStrausExtensionV14 (n : Nat) (hn : 2 ≤ n)
 
 #print axioms erdosStrausExtensionV14
 
+-- ============================================================================
+-- EXTENSIONS v1.5.0 : ERDŐS-STRAUS AU-DELÀ DE 99 % (99,01 % CERTIFIÉ)
+-- ============================================================================
+
+theorem erdosStrausMod168Eq145 (m : Nat) :
+    4 * (42 * m + 38) * (6 * (168 * m + 145) * (m + 1)) *
+      (3 * (168 * m + 145) * (21 * m + 19) * (m + 1)) =
+    (168 * m + 145) *
+      ((6 * (168 * m + 145) * (m + 1)) * (3 * (168 * m + 145) * (21 * m + 19) * (m + 1)) +
+       (42 * m + 38) * (3 * (168 * m + 145) * (21 * m + 19) * (m + 1)) +
+       (42 * m + 38) * (6 * (168 * m + 145) * (m + 1))) := by
+  let n := 168 * m + 145
+  let u := 21 * m + 19
+  let v := 3 * (m + 1)
+  let y := 2 * n * v
+  let z := n * u * v
+  have hx : 42 * m + 38 = 2 * u := by dsimp [u]; omega
+  have hy : 6 * n * (m + 1) = y := by
+    dsimp [y, v]
+    have e : 6 * n * (m + 1) = 2 * n * (3 * (m + 1)) := by ac_rfl
+    exact e
+  have hz : 3 * n * u * (m + 1) = z := by
+    dsimp [z, v]
+    have e : 3 * n * u * (m + 1) = n * u * (3 * (m + 1)) := by ac_rfl
+    exact e
+  have h_u4 : 2 * u + 4 = 14 * v := by dsimp [u, v]; omega
+  have h_n7 : 2 * n + 14 = 16 * u := by dsimp [n, u]; omega
+  have h_inner : y * z + (2 * u) * z + (2 * u) * y = n * u * v * (2 * n * v + (2 * u + 4)) := by
+    dsimp [y, z]
+    have t1 : (2 * n * v) * (n * u * v) = n * u * v * (2 * n * v) := by ac_rfl
+    have t2 : (2 * u) * (n * u * v) = n * u * v * (2 * u) := by ac_rfl
+    have t3 : (2 * u) * (2 * n * v) = n * u * v * 4 := by
+      have e : (2 * u) * (2 * n * v) = n * u * v * (2 * 2) := by ac_rfl
+      rw [e]
+    rw [t1, t2, t3, ← Nat.mul_add, ← Nat.mul_add]
+  have h_factor : 2 * n * v + (2 * u + 4) = v * (2 * n + 14) := by
+    rw [h_u4]
+    have t1 : 2 * n * v = v * (2 * n) := by ac_rfl
+    have t2 : 14 * v = v * 14 := by ac_rfl
+    rw [t1, t2, ← Nat.mul_add]
+  change 4 * (42 * m + 38) * (6 * n * (m + 1)) * (3 * n * u * (m + 1)) =
+    n * ((6 * n * (m + 1)) * (3 * n * u * (m + 1)) +
+         (42 * m + 38) * (3 * n * u * (m + 1)) +
+         (42 * m + 38) * (6 * n * (m + 1)))
+  rw [hx, hy, hz, h_inner, h_factor, h_n7]
+  dsimp [y, z]
+  have lhs : 4 * (2 * u) * (2 * n * v) * (n * u * v) = 16 * (n * n * u * u * v * v) := by
+    have e : 4 * (2 * u) * (2 * n * v) * (n * u * v) = (4 * 2 * 2) * (n * n * u * u * v * v) := by ac_rfl
+    rw [e]
+  have rhs : n * (n * u * v * (v * (16 * u))) = 16 * (n * n * u * u * v * v) := by
+    have e : n * (n * u * v * (v * (16 * u))) = 16 * (n * n * u * u * v * v) := by ac_rfl
+    rw [e]
+  rw [lhs, rhs]
+
+theorem erdosStrausPrimeTriple (p a b c : Nat)
+    (h_id : 4 * a * b * c = p * (b * c + a * c + a * b)) (k : Nat) :
+    4 * (a * k) * (b * k) * (c * k) =
+    (p * k) * ((b * k) * (c * k) + (a * k) * (c * k) + (a * k) * (b * k)) := by
+  have t1 : (b * k) * (c * k) = (b * c) * (k * k) := by ac_rfl
+  have t2 : (a * k) * (c * k) = (a * c) * (k * k) := by ac_rfl
+  have t3 : (a * k) * (b * k) = (a * b) * (k * k) := by ac_rfl
+  rw [t1, t2, t3, ← Nat.add_mul, ← Nat.add_mul]
+  have lhs : 4 * (a * k) * (b * k) * (c * k) = (4 * a * b * c) * (k * k * k) := by ac_rfl
+  have rhs : (p * k) * ((b * c + a * c + a * b) * (k * k)) =
+      (p * (b * c + a * c + a * b)) * (k * k * k) := by ac_rfl
+  rw [lhs, rhs, h_id]
+
+theorem erdosStrausExtensionV15 (n : Nat) (hn : 2 ≤ n)
+    (h_ext :
+      n % 168 = 145 ∨ n % 17 = 0 ∨ n % 19 = 0 ∨ n % 23 = 0 ∨
+      n % 29 = 0 ∨ n % 31 = 0 ∨ n % 37 = 0 ∨ n % 43 = 0 ∨ n % 47 = 0) :
+    HasErdosStraus n := by
+  rcases h_ext with h168 | (h17 | (h19 | (h23 | (h29 | (h31 | (h37 | (h43 | h47)))))))
+  · have h_dm := Nat.div_add_mod n 168
+    have hex : ∃ m, n = 168 * m + 145 := ⟨n / 168, by omega⟩
+    rcases hex with ⟨m, rfl⟩
+    exact ⟨42 * m + 38, 6 * (168 * m + 145) * (m + 1),
+      3 * (168 * m + 145) * (21 * m + 19) * (m + 1),
+      by omega,
+      Nat.mul_pos (Nat.mul_pos (by omega) (by omega)) (by omega),
+      Nat.mul_pos (Nat.mul_pos (Nat.mul_pos (by omega) (by omega)) (by omega)) (by omega),
+      erdosStrausMod168Eq145 m⟩
+  · have h_dm := Nat.div_add_mod n 17
+    have hk : 0 < n / 17 := by omega
+    have hex : ∃ k, n = 17 * k := ⟨n / 17, by omega⟩
+    rcases hex with ⟨k, rfl⟩
+    exact ⟨5 * k, 30 * k, 510 * k, by omega, by omega, by omega,
+      erdosStrausPrimeTriple 17 5 30 510 (by omega) k⟩
+  · have h_dm := Nat.div_add_mod n 19
+    have hk : 0 < n / 19 := by omega
+    have hex : ∃ k, n = 19 * k := ⟨n / 19, by omega⟩
+    rcases hex with ⟨k, rfl⟩
+    exact ⟨5 * k, 190 * k, 190 * k, by omega, by omega, by omega,
+      erdosStrausPrimeTriple 19 5 190 190 (by omega) k⟩
+  · have h_dm := Nat.div_add_mod n 23
+    have hk : 0 < n / 23 := by omega
+    have hex : ∃ k, n = 23 * k := ⟨n / 23, by omega⟩
+    rcases hex with ⟨k, rfl⟩
+    exact ⟨6 * k, 276 * k, 276 * k, by omega, by omega, by omega,
+      erdosStrausPrimeTriple 23 6 276 276 (by omega) k⟩
+  · have h_dm := Nat.div_add_mod n 29
+    have hk : 0 < n / 29 := by omega
+    have hex : ∃ k, n = 29 * k := ⟨n / 29, by omega⟩
+    rcases hex with ⟨k, rfl⟩
+    exact ⟨8 * k, 116 * k, 232 * k, by omega, by omega, by omega,
+      erdosStrausPrimeTriple 29 8 116 232 (by omega) k⟩
+  · have h_dm := Nat.div_add_mod n 31
+    have hk : 0 < n / 31 := by omega
+    have hex : ∃ k, n = 31 * k := ⟨n / 31, by omega⟩
+    rcases hex with ⟨k, rfl⟩
+    exact ⟨8 * k, 496 * k, 496 * k, by omega, by omega, by omega,
+      erdosStrausPrimeTriple 31 8 496 496 (by omega) k⟩
+  · have h_dm := Nat.div_add_mod n 37
+    have hk : 0 < n / 37 := by omega
+    have hex : ∃ k, n = 37 * k := ⟨n / 37, by omega⟩
+    rcases hex with ⟨k, rfl⟩
+    exact ⟨10 * k, 185 * k, 370 * k, by omega, by omega, by omega,
+      erdosStrausPrimeTriple 37 10 185 370 (by omega) k⟩
+  · have h_dm := Nat.div_add_mod n 43
+    have hk : 0 < n / 43 := by omega
+    have hex : ∃ k, n = 43 * k := ⟨n / 43, by omega⟩
+    rcases hex with ⟨k, rfl⟩
+    exact ⟨11 * k, 946 * k, 946 * k, by omega, by omega, by omega,
+      erdosStrausPrimeTriple 43 11 946 946 (by omega) k⟩
+  · have h_dm := Nat.div_add_mod n 47
+    have hk : 0 < n / 47 := by omega
+    have hex : ∃ k, n = 47 * k := ⟨n / 47, by omega⟩
+    rcases hex with ⟨k, rfl⟩
+    exact ⟨12 * k, 1128 * k, 1128 * k, by omega, by omega, by omega,
+      erdosStrausPrimeTriple 47 12 1128 1128 (by omega) k⟩
+
+#print axioms erdosStrausExtensionV15
