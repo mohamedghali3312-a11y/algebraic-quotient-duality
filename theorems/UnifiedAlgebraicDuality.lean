@@ -869,16 +869,11 @@ theorem erdosStrausExtensionV14 (n : Nat) (hn : 2 ≤ n)
       (120 * m + 97) * (15 * m + 14) * (2 * m + 2),
       by omega, Nat.mul_pos (by omega) (by omega),
       Nat.mul_pos (Nat.mul_pos (by omega) (by omega)) (by omega),
-      erdosStrausMod120Eq97 m⟩
-  · have h_dm := Nat.div_add_mod n 11
-    have hk : 0 < n / 11 := by omega
-    have hex : ∃ k, n = 11 * k := ⟨n / 11, by omega⟩
-    rcases hex with ⟨k, rfl⟩
-    exact ⟨3 * k, 66 * k, 66 * k, by omega, by omega, by omega, erdosStrausMod11Eq0 k⟩
-  · have h_dm := Nat.div_add_mod n 13
-    have hk : 0 < n / 13 := by omega
-    have hex : ∃ k, n = 13 * k := ⟨n / 13, by omega⟩
-    rcases hex with ⟨k, rfl⟩
-    exact ⟨4 * k, 18 * k, 468 * k, by omega, by omega, by omega, erdosStrausMod13Eq0 k⟩
+        have h_mid : y * (y * u) + (2 * u) * (y * u) + (2 * u) * y = y * ((y + 2 * u + 2) * u) := by
+    rw [Nat.add_mul (y + 2 * u) 2 u, Nat.add_mul y (2 * u) u,
+        Nat.mul_add y (y * u + (2 * u) * u) (2 * u), Nat.mul_add y (y * u) ((2 * u) * u)]
+    have c1 : (2 * u) * (y * u) = y * ((2 * u) * u) := by ac_rfl
+    have c2 : (2 * u) * y = y * (2 * u) := by ac_rfl
+    rw [c1, c2]
 
 #print axioms erdosStrausExtensionV14
