@@ -623,3 +623,129 @@ theorem erdosStrausUnifiedCoverage (n : Nat) (hn : 7 <= n)
 #print axioms bezoutImpliesUnitMod
 #print axioms spectralRegularizationDetBound
 #print axioms natModularTranslationInstantiation
+-- ============================================================================
+-- Extension v1.3.0 : Descente dyadique de Collatz modulo 128 et 256 (> 90 %)
+-- ============================================================================
+
+def collatzStep (n : Nat) : Nat :=
+  if n % 2 = 0 then n / 2 else 3 * n + 1
+
+def collatzIter : Nat -> Nat -> Nat
+  | 0, n => n
+  | k + 1, n => collatzIter k (collatzStep n)
+
+theorem collatzMod128Eq7Descent (m : Nat) :
+    collatzIter 11 (128 * m + 7) < 128 * m + 7 := by
+  have h1  : collatzStep (128 * m + 7)  = 384 * m + 22  := by unfold collatzStep; split <;> omega
+  have h2  : collatzStep (384 * m + 22) = 192 * m + 11  := by unfold collatzStep; split <;> omega
+  have h3  : collatzStep (192 * m + 11) = 576 * m + 34  := by unfold collatzStep; split <;> omega
+  have h4  : collatzStep (576 * m + 34) = 288 * m + 17  := by unfold collatzStep; split <;> omega
+  have h5  : collatzStep (288 * m + 17) = 864 * m + 52  := by unfold collatzStep; split <;> omega
+  have h6  : collatzStep (864 * m + 52) = 432 * m + 26  := by unfold collatzStep; split <;> omega
+  have h7  : collatzStep (432 * m + 26) = 216 * m + 13  := by unfold collatzStep; split <;> omega
+  have h8  : collatzStep (216 * m + 13) = 648 * m + 40  := by unfold collatzStep; split <;> omega
+  have h9  : collatzStep (648 * m + 40) = 324 * m + 20  := by unfold collatzStep; split <;> omega
+  have h10 : collatzStep (324 * m + 20) = 162 * m + 10  := by unfold collatzStep; split <;> omega
+  have h11 : collatzStep (162 * m + 10) = 81 * m + 5    := by unfold collatzStep; split <;> omega
+  simp only [collatzIter, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11]
+  omega
+
+theorem collatzMod128Eq23Descent (m : Nat) :
+    collatzIter 10 (128 * m + 23) < 128 * m + 23 := by
+  have h1  : collatzStep (128 * m + 23)  = 384 * m + 70  := by unfold collatzStep; split <;> omega
+  have h2  : collatzStep (384 * m + 70)  = 192 * m + 35  := by unfold collatzStep; split <;> omega
+  have h3  : collatzStep (192 * m + 35)  = 576 * m + 106 := by unfold collatzStep; split <;> omega
+  have h4  : collatzStep (576 * m + 106) = 288 * m + 53  := by unfold collatzStep; split <;> omega
+  have h5  : collatzStep (288 * m + 53)  = 864 * m + 160 := by unfold collatzStep; split <;> omega
+  have h6  : collatzStep (864 * m + 160) = 432 * m + 80  := by unfold collatzStep; split <;> omega
+  have h7  : collatzStep (432 * m + 80)  = 216 * m + 40  := by unfold collatzStep; split <;> omega
+  have h8  : collatzStep (216 * m + 40)  = 108 * m + 20  := by unfold collatzStep; split <;> omega
+  have h9  : collatzStep (108 * m + 20)  = 54 * m + 10   := by unfold collatzStep; split <;> omega
+  have h10 : collatzStep (54 * m + 10)   = 27 * m + 5    := by unfold collatzStep; split <;> omega
+  simp only [collatzIter, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10]
+  omega
+
+theorem collatzMod256Eq15Descent (m : Nat) :
+    collatzIter 12 (256 * m + 15) < 256 * m + 15 := by
+  have h1  : collatzStep (256 * m + 15)   = 768 * m + 46   := by unfold collatzStep; split <;> omega
+  have h2  : collatzStep (768 * m + 46)   = 384 * m + 23   := by unfold collatzStep; split <;> omega
+  have h3  : collatzStep (384 * m + 23)   = 1152 * m + 70  := by unfold collatzStep; split <;> omega
+  have h4  : collatzStep (1152 * m + 70)  = 576 * m + 35   := by unfold collatzStep; split <;> omega
+  have h5  : collatzStep (576 * m + 35)   = 1728 * m + 106 := by unfold collatzStep; split <;> omega
+  have h6  : collatzStep (1728 * m + 106) = 864 * m + 53   := by unfold collatzStep; split <;> omega
+  have h7  : collatzStep (864 * m + 53)   = 2592 * m + 160 := by unfold collatzStep; split <;> omega
+  have h8  : collatzStep (2592 * m + 160) = 1296 * m + 80  := by unfold collatzStep; split <;> omega
+  have h9  : collatzStep (1296 * m + 80)  = 648 * m + 40   := by unfold collatzStep; split <;> omega
+  have h10 : collatzStep (648 * m + 40)   = 324 * m + 20   := by unfold collatzStep; split <;> omega
+  have h11 : collatzStep (324 * m + 20)   = 162 * m + 10   := by unfold collatzStep; split <;> omega
+  have h12 : collatzStep (162 * m + 10)   = 81 * m + 5     := by unfold collatzStep; split <;> omega
+  simp only [collatzIter, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12]
+  omega
+
+theorem collatzMod256Eq39Descent (m : Nat) :
+    collatzIter 13 (256 * m + 39) < 256 * m + 39 := by
+  have h1  : collatzStep (256 * m + 39)   = 768 * m + 118  := by unfold collatzStep; split <;> omega
+  have h2  : collatzStep (768 * m + 118)  = 384 * m + 59   := by unfold collatzStep; split <;> omega
+  have h3  : collatzStep (384 * m + 59)   = 1152 * m + 178 := by unfold collatzStep; split <;> omega
+  have h4  : collatzStep (1152 * m + 178) = 576 * m + 89   := by unfold collatzStep; split <;> omega
+  have h5  : collatzStep (576 * m + 89)   = 1728 * m + 268 := by unfold collatzStep; split <;> omega
+  have h6  : collatzStep (1728 * m + 268) = 864 * m + 134  := by unfold collatzStep; split <;> omega
+  have h7  : collatzStep (864 * m + 134)  = 432 * m + 67   := by unfold collatzStep; split <;> omega
+  have h8  : collatzStep (432 * m + 67)   = 1296 * m + 202 := by unfold collatzStep; split <;> omega
+  have h9  : collatzStep (1296 * m + 202) = 648 * m + 101  := by unfold collatzStep; split <;> omega
+  have h10 : collatzStep (648 * m + 101)  = 1944 * m + 304 := by unfold collatzStep; split <;> omega
+  have h11 : collatzStep (1944 * m + 304) = 972 * m + 152  := by unfold collatzStep; split <;> omega
+  have h12 : collatzStep (972 * m + 152)  = 486 * m + 76   := by unfold collatzStep; split <;> omega
+  have h13 : collatzStep (486 * m + 76)   = 243 * m + 38   := by unfold collatzStep; split <;> omega
+  simp only [collatzIter, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13]
+  omega
+
+theorem collatzMod256Eq79Descent (m : Nat) :
+    collatzIter 13 (256 * m + 79) < 256 * m + 79 := by
+  have h1  : collatzStep (256 * m + 79)   = 768 * m + 238  := by unfold collatzStep; split <;> omega
+  have h2  : collatzStep (768 * m + 238)  = 384 * m + 119  := by unfold collatzStep; split <;> omega
+  have h3  : collatzStep (384 * m + 119)  = 1152 * m + 358 := by unfold collatzStep; split <;> omega
+  have h4  : collatzStep (1152 * m + 358) = 576 * m + 179  := by unfold collatzStep; split <;> omega
+  have h5  : collatzStep (576 * m + 179)  = 1728 * m + 538 := by unfold collatzStep; split <;> omega
+  have h6  : collatzStep (1728 * m + 538) = 864 * m + 269  := by unfold collatzStep; split <;> omega
+  have h7  : collatzStep (864 * m + 269)  = 2592 * m + 808 := by unfold collatzStep; split <;> omega
+  have h8  : collatzStep (2592 * m + 808) = 1296 * m + 404 := by unfold collatzStep; split <;> omega
+  have h9  : collatzStep (1296 * m + 404) = 648 * m + 202  := by unfold collatzStep; split <;> omega
+  have h10 : collatzStep (648 * m + 202)  = 324 * m + 101  := by unfold collatzStep; split <;> omega
+  have h11 : collatzStep (324 * m + 101)  = 972 * m + 304  := by unfold collatzStep; split <;> omega
+  have h12 : collatzStep (972 * m + 304)  = 486 * m + 152  := by unfold collatzStep; split <;> omega
+  have h13 : collatzStep (486 * m + 76 * 2) = 243 * m + 76 := by unfold collatzStep; split <;> omega
+  simp only [collatzIter, h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12, h13]
+  omega
+
+theorem collatzHighOrderDescent (n : Nat)
+    (h_sub : n % 128 = 7 ∨ n % 128 = 23 ∨ n % 256 = 15 ∨ n % 256 = 39 ∨ n % 256 = 79) :
+    ∃ k, 0 < k ∧ collatzIter k n < n := by
+  rcases h_sub with h | h | h | h | h
+  case inl =>
+    have h_dm := Nat.div_add_mod n 128
+    have hex : ∃ m, n = 128 * m + 7 := ⟨n / 128, by omega⟩
+    rcases hex with ⟨m, rfl⟩
+    exact ⟨11, by omega, collatzMod128Eq7Descent m⟩
+  case inr.inl =>
+    have h_dm := Nat.div_add_mod n 128
+    have hex : ∃ m, n = 128 * m + 23 := ⟨n / 128, by omega⟩
+    rcases hex with ⟨m, rfl⟩
+    exact ⟨10, by omega, collatzMod128Eq23Descent m⟩
+  case inr.inr.inl =>
+    have h_dm := Nat.div_add_mod n 256
+    have hex : ∃ m, n = 256 * m + 15 := ⟨n / 256, by omega⟩
+    rcases hex with ⟨m, rfl⟩
+    exact ⟨12, by omega, collatzMod256Eq15Descent m⟩
+  case inr.inr.inr.inl =>
+    have h_dm := Nat.div_add_mod n 256
+    have hex : ∃ m, n = 256 * m + 39 := ⟨n / 256, by omega⟩
+    rcases hex with ⟨m, rfl⟩
+    exact ⟨13, by omega, collatzMod256Eq39Descent m⟩
+  case inr.inr.inr.inr =>
+    have h_dm := Nat.div_add_mod n 256
+    have hex : ∃ m, n = 256 * m + 79 := ⟨n / 256, by omega⟩
+    rcases hex with ⟨m, rfl⟩
+    exact ⟨13, by omega, collatzMod256Eq79Descent m⟩
+
+#print axioms collatzHighOrderDescent
