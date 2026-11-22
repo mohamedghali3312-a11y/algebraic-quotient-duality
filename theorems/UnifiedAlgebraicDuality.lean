@@ -512,12 +512,11 @@ theorem erdosStrausCase4_3 (n : Nat) (h : n % 4 = 3) : HasErdosStraus n := by
   exact ⟨k + 1, (4 * k + 3) * (k + 1) + 1,
     ((4 * k + 3) * (k + 1)) * ((4 * k + 3) * (k + 1) + 1),
     by omega, hy, hz, erdosStrausMod4Eq3 k⟩
-
 theorem erdosStrausCase12_9 (n : Nat) (h : n % 12 = 9) : HasErdosStraus n := by
   have h_dm := Nat.div_add_mod n 12
   have hex : ∃ k, n = 12 * k + 9 := ⟨n / 12, by omega⟩
   rcases hex with ⟨k, hn_eq⟩
-  clear h h_dm; subst hn_eq
+  subst hn_eq
   have hy : 0 < (12 * k + 9) * (k + 1) + 1 := by omega
   have hz : 0 < ((12 * k + 9) * (k + 1)) * ((12 * k + 9) * (k + 1) + 1) :=
     Nat.mul_pos (Nat.mul_pos (by omega) (by omega)) (by omega)
@@ -529,27 +528,33 @@ theorem erdosStrausCase24_5 (n : Nat) (h : n % 24 = 5) : HasErdosStraus n := by
   have h_dm := Nat.div_add_mod n 24
   have hex : ∃ q, n = 24 * q + 5 := ⟨n / 24, by omega⟩
   rcases hex with ⟨q, hn_eq⟩
-  clear h h_dm; subst hn_eq
-  have hy : 0 < (24 * q + 5) * (3 * q + 1) := Nat.mul_pos (by omega) (by omega)
-  have hz : 0 < (24 * q + 5) * (6 * q + 2) := Nat.mul_pos (by omega) (by omega)
-  exact ⟨6 * q + 2, (24 * q + 5) * (3 * q + 1), (24 * q + 5) * (6 * q + 2),
+  subst hn_eq
+  have hy : 0 < (24 * q + 5) * (3 * q + 1) :=
+    Nat.mul_pos (by omega) (by omega)
+  have hz : 0 < (24 * q + 5) * (6 * q + 2) :=
+    Nat.mul_pos (by omega) (by omega)
+  exact ⟨6 * q + 2, (24 * q + 5) * (3 * q + 1),
+    (24 * q + 5) * (6 * q + 2),
     by omega, hy, hz, erdosStrausMod24Eq5 q⟩
 
 theorem erdosStrausCase24_13 (n : Nat) (h : n % 24 = 13) : HasErdosStraus n := by
   have h_dm := Nat.div_add_mod n 24
   have hex : ∃ q, n = 24 * q + 13 := ⟨n / 24, by omega⟩
   rcases hex with ⟨q, hn_eq⟩
-  clear h h_dm; subst hn_eq
-  have hy : 0 < (24 * q + 13) * (3 * q + 2) := Nat.mul_pos (by omega) (by omega)
-  have hz : 0 < (24 * q + 13) * (6 * q + 4) := Nat.mul_pos (by omega) (by omega)
-  exact ⟨6 * q + 4, (24 * q + 13) * (3 * q + 2), (24 * q + 13) * (6 * q + 4),
+  subst hn_eq
+  have hy : 0 < (24 * q + 13) * (3 * q + 2) :=
+    Nat.mul_pos (by omega) (by omega)
+  have hz : 0 < (24 * q + 13) * (6 * q + 4) :=
+    Nat.mul_pos (by omega) (by omega)
+  exact ⟨6 * q + 4, (24 * q + 13) * (3 * q + 2),
+    (24 * q + 13) * (6 * q + 4),
     by omega, hy, hz, erdosStrausMod24Eq13 q⟩
 
 theorem erdosStrausCase48_17 (n : Nat) (h : n % 48 = 17) : HasErdosStraus n := by
   have h_dm := Nat.div_add_mod n 48
   have hex : ∃ q, n = 48 * q + 17 := ⟨n / 48, by omega⟩
   rcases hex with ⟨q, hn_eq⟩
-  clear h h_dm; subst hn_eq
+  subst hn_eq
   have hy : 0 < (48 * q + 17) * (4 * q + 2) + 1 := by omega
   have hz : 0 < ((48 * q + 17) * (4 * q + 2)) * ((48 * q + 17) * (4 * q + 2) + 1) :=
     Nat.mul_pos (Nat.mul_pos (by omega) (by omega)) (by omega)
@@ -561,23 +566,19 @@ theorem erdosStrausCase5 (n : Nat) (hn : 5 <= n) (h : n % 5 = 0) : HasErdosStrau
   have h_dm := Nat.div_add_mod n 5
   have hex : ∃ k, n = 5 * k := ⟨n / 5, by omega⟩
   rcases hex with ⟨k, hn_eq⟩
-  clear hn h h_dm; subst hn_eq
-  exact ⟨2 * k, 4 * k, 20 * k, by omega, by omega, by omega, erdosStrausMod5Eq0 k⟩
+  subst hn_eq
+  exact ⟨2 * k, 4 * k, 20 * k,
+    by omega, by omega, by omega, erdosStrausMod5Eq0 k⟩
 
 theorem erdosStrausCase7 (n : Nat) (hn : 7 <= n) (h : n % 7 = 0) : HasErdosStraus n := by
   have h_dm := Nat.div_add_mod n 7
   have hex : ∃ k, n = 7 * k := ⟨n / 7, by omega⟩
   rcases hex with ⟨k, hn_eq⟩
-  clear hn h h_dm; subst hn_eq
-  exact ⟨2 * k, 15 * k, 210 * k, by omega, by omega, by omega, erdosStrausMod7Eq0 k⟩
+  subst hn_eq
+  exact ⟨2 * k, 15 * k, 210 * k,
+    by omega, by omega, by omega, erdosStrausMod7Eq0 k⟩
 
-theorem erdosStrausUnifiedCoverage (n : Nat) (hn : 7 ≤ n)
-    (h_class : n % 2 = 0 ∨ n % 4 = 3 ∨ n % 12 = 9 ∨ n % 24 = 5 ∨ n % 24 = 13 ∨ n % 48 = 17 ∨ n % 5 = 0 ∨ n % 7 = 0) :
-    HasErdosStraus n := by
-  rcases h_class with h | h | h | h | h | h | h | h
-  case inl => exact erdosStrausCase2 n (by omega) h
-  case inr.inl => exact erdosStrausCase4_3 n h
-  case inr.inr.inl => exact erdosStrausCase12_9 n h
+ erdosStrausCase12_9 n h
   case inr.inr.inr.inl => exact erdosStrausCase24_5 n h
   case inr.inr.inr.inr.inl => exact erdosStrausCase24_13 n h
   case inr.inr.inr.inr.inr.inl => exact erdosStrausCase48_17 n h
