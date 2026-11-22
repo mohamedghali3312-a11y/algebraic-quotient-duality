@@ -558,9 +558,7 @@ theorem erdosStrausCase5 (n : Nat) (hn : 5 <= n) (h : n % 5 = 0) : HasErdosStrau
   have hn_eq : n = 5 * k := by omega
   have h_id := erdosStrausMod5Eq0 k
   have h_congr := congrArg (fun x => x * ((4 * k) * (20 * k) + (2 * k) * (20 * k) + (2 * k) * (4 * k))) hn_eq.symm
-  refine Exists.intro (2 * k) (Exists.intro (4 * k) (Exists.intro (20 * k) ?_))
-  refine And.intro (by omega) (And.intro (by omega) (And.intro (by omega) ?_))
-  exact Eq.trans h_id h_congr
+  exact ⟨2 * k, 4 * k, 20 * k, by omega, by omega, by omega, Eq.trans h_id h_congr⟩
 
 theorem erdosStrausCase7 (n : Nat) (hn : 7 <= n) (h : n % 7 = 0) : HasErdosStraus n := by
   have h_dm := Nat.div_add_mod n 7
@@ -568,10 +566,7 @@ theorem erdosStrausCase7 (n : Nat) (hn : 7 <= n) (h : n % 7 = 0) : HasErdosStrau
   have hn_eq : n = 7 * k := by omega
   have h_id := erdosStrausMod7Eq0 k
   have h_congr := congrArg (fun x => x * ((15 * k) * (210 * k) + (2 * k) * (210 * k) + (2 * k) * (15 * k))) hn_eq.symm
-  refine Exists.intro (2 * k) (Exists.intro (15 * k) (Exists.intro (210 * k) ?_))
-  refine And.intro (by omega) (And.intro (by omega) (And.intro (by omega) ?_))
-  exact Eq.trans h_id h_congr
-
+  exact ⟨2 * k, 15 * k, 210 * k, by omega, by omega, by omega, Eq.trans h_id h_congr⟩
 
 theorem erdosStrausUnifiedCoverage (n : Nat) (hn : 7 ≤ n)
     (h_class : n % 2 = 0 ∨ n % 4 = 3 ∨ n % 12 = 9 ∨ n % 24 = 5 ∨ n % 24 = 13 ∨ n % 48 = 17 ∨ n % 5 = 0 ∨ n % 7 = 0) :
