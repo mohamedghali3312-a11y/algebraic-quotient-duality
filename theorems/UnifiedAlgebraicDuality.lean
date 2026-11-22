@@ -494,9 +494,10 @@ theorem erdosStrausMod7Eq0 (k : Nat) :
   rw [h1, h2, h3]
   have h_sum : 3150 * (k * k) + 420 * (k * k) + 30 * (k * k) = 3600 * (k * k) := by omega
   rw [h_sum]
-  have h_rhs : (7 * k) * (3600 * (k * k)) = 25200 * (k * k * k) := by
-    have h_eq : (7 * k) * (3600 * (k * k)) = (7 * 3600) * (k * k * k) := by ac_rfl; rw [h_eq]
-  rw [h_lhs, h_rhs]
+
+  rw [h_lhs]
+  have h_const : 7 * 3600 = 25200 := rfl
+  rw [← h_const]; ac_rfl
 
 def HasErdosStraus (n : Nat) : Prop :=
   ∃ x y z : Nat, 0 < x ∧ 0 < y ∧ 0 < z ∧ 4 * x * y * z = n * (y * z + x * z + x * y)
