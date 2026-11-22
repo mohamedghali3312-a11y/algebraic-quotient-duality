@@ -464,8 +464,7 @@ theorem erdosStrausMod48Eq17 (q : Nat) :
 
   have h3 := congrArg (fun x => x * (48 * q + 17)) h2.symm
   rw [h1, h3]
-  ac_rfl
-
+  
 theorem erdosStrausMod5Eq0 (k : Nat) :
     4 * (2 * k) * (4 * k) * (20 * k) =
     (5 * k) * ((4 * k) * (20 * k) + (2 * k) * (20 * k) + (2 * k) * (4 * k)) := by
