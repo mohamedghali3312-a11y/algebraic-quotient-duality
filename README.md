@@ -1,5 +1,4 @@
 # Algebraic Quotient Duality — Formalisation Lean 4 (`v1.2.0`)
-
 [![Lean 4 Verification](https://github.com)](https://github.com)
 [![DOI](https://zenodo.org)](https://doi.org)
 
