@@ -96,9 +96,7 @@ def generate_lean_file(filename="theorems/UltraHighCoverage.lean"):
             f"    _ = ({p} * ({b} * {c} + {a} * {c} + {a} * {b})) * (k * k * k) := by rw [hc]",
             f"    _ = ({p} * k) * (({b} * k) * ({c} * k) + ({a} * k) * ({c} * k) + ({a} * k) * ({b} * k)) := by",
             f"        
-            ""f"        simp only [Nat.mul_add, Nat.add_mul, Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm]",
-
-        ])
+            f"        simp only [Nat.mul_add, Nat.add_mul, Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm]", ])
 
     conds = " ∨ ".join([f"n % {p} = 0" for p in PRIMES_ES])
     lines.extend([
