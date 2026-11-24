@@ -89,18 +89,18 @@ def generate_lean_file(filename="theorems/UltraHighCoverage.lean"):
         a, b, c = find_es_prime_witness(p)
         lines.extend([
             f"theorem erdosStrausPrimeDiv{p} (k : Nat) (hk : 1 <= k) : HasErdosStraus ({p} * k) := by",
+        lines.extend([
+            f"theorem erdosStrausPrimeDiv{p} (k : Nat) (hk : 1 <= k) : HasErdosStraus ({p} * k) := by",
             f"  refine ⟨{a} * k, {b} * k, {c} * k, by omega, by omega, by omega, ?_⟩",
             f"  have hc : 4 * {a} * {b} * {c} = {p} * ({b} * {c} + {a} * {c} + {a} * {b}) := by decide",
             f"  calc 4 * ({a} * k) * ({b} * k) * ({c} * k)",
             f"    _ = (4 * {a} * {b} * {c}) * (k * k * k) := by ac_rfl",
             f"    _ = ({p} * ({b} * {c} + {a} * {c} + {a} * {b})) * (k * k * k) := by rw [hc]",
             f"    _ = ({p} * k) * (({b} * k) * ({c} * k) + ({a} * k) * ({c} * k) + ({a} * k) * ({b} * k)) := by",
-                  
-                        "    _ = ({p} * k) * (({b} * k) * ({c} * k) + ({a} * k) * ({c} * k) + ({a} * k) * ({b} * k)) := by".format(p=p, a=a, b=b, c=c),
-                              "        rw [Nat.mul_add, Nat.mul_add, Nat.add_mul]",
-
+            "        rw [Nat.mul_add, Nat.mul_add]",
             ""
         ])
+
 
 
     conds = " ∨ ".join([f"n % {p} = 0" for p in PRIMES_ES])
