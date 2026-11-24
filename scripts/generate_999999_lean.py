@@ -112,7 +112,7 @@ def generate_lean_file(filename="theorems/UltraHighCoverage.lean"):
             f"  · have h_dm := Nat.div_add_mod n {p}",
             f"    have hex : ∃ k, n = {p} * k := ⟨n / {p}, by omega⟩",
             f"    rcases hex with ⟨k, rfl⟩",
-            "    exact erdosStrausPrimeDiv{p} k (by omega)"])
+            f"    exact erdosStrausPrimeDiv{p} k (by omega)"])
     lines.extend([
         "",
         "def collatzStep (n : Nat) : Nat :=",
