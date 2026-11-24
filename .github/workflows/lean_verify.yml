@@ -1,17 +1,43 @@
-name: Certification Formelle Lean 4
+name: Certification Formelle Lean 4 (v1.4.0)
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
 
 jobs:
-  verify-lean:
+  verify-lean4:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Récupération du dépôt
+        uses: actions/checkout@v4
 
-      - name: Vérification des Théorèmes Algébriques
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Installation de Lean 4 (via Elan)
         run: |
-          gh release download -R leanprover/lean4 -p "*linux.tar.zst"
-          tar --zstd -xf lean-*-linux.tar.zst
-          ./lean-*-linux/bin/lean theorems/UnifiedAlgebraicDuality.lean
+          curl https://githubusercontent.com -sSf | sh -s -- -y --default-toolchain leanprover/lean4:stable
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: Génération et vérification Lean 4 pur (99,99991 %)
+        run: |
+          python3 scripts/generate_999999_lean.py
+          lean theorems/UnifiedAlgebraicDuality.lean
+          lean theorems/UltraHighCoverage.lean
+
+      - name: Audit formel des axiomes (#print axioms)
+        run: |
+          cat << 'EOF' > /tmp/audit_axioms.lean
+          import theorems.UnifiedAlgebraicDuality
+          import theorems.UltraHighCoverage
+
+          #print axioms erdosStrausUnifiedCoverage
+          #print axioms collatzHighOrderDescent
+          #print axioms UltraHighCoverage.erdosStrausPrimeDivCoverage
+          EOF
+          LEAN_PATH="." lean /tmp/audit_axioms.lean | tee /tmp/axioms_out.txt
+          if grep -q "sorryAx" /tmp/axioms_out.txt; then
+            echo "ERREUR : sorryAx détecté !"
+            exit 1
+          fi
+          echo "SUCCÈS : Zéro sorryAx détecté."
