@@ -20,6 +20,9 @@ jobs:
           auto-config: false
           build: false
 
+      - name: Configuration de la toolchain stable
+        run: elan default stable
+
       - name: Génération et vérification Lean 4 pur (99,99991 %)
         run: |
           python3 scripts/generate_999999_lean.py
