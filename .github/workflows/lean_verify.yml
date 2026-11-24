@@ -14,10 +14,11 @@ jobs:
       - name: Récupération du dépôt
         uses: actions/checkout@v4
 
-      - name: Installation de Lean 4 (via Elan)
-        run: |
-          curl -sSfL https://lean-lang.org | sh -s -- -y --default-toolchain leanprover/lean4:stable
-          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+      - name: Installation de Lean 4
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
 
       - name: Génération et vérification Lean 4 pur (99,99991 %)
         run: |
