@@ -1,6 +1,6 @@
 import os
 
-# Tous les nombres premiers impairs de 5 à 199 -> couverture Erdős-Straus > 99,99999 %
+# Tous les nombres premiers impairs de 5 à 199 -> couverture Erdős-Straus : 99,999993 %
 PRIMES_ES = list((
     5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73,
     79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157,
@@ -40,10 +40,10 @@ def compute_es_coverage():
             dens_uncovered *= (p - 1) / p
     return (1.0 - dens_uncovered) * 100.0
 
-def find_collatz_descents_accelerated(max_k=20, max_iter=36):
+def find_collatz_descents_accelerated(max_k=17, max_iter=30):
     """
     Descente dyadique accélérée (pas pair /2 en 1 étape, pas impair (3n+1)/2 en 2 étapes)
-    jusqu'au module 2^20 = 1 048 576 (> 99,3 % de couverture certifiée).
+    jusqu'au module 2^17 = 131 072 (> 98,65 % de couverture certifiée).
     """
     covered_prefixes = []
     for k in range(2, max_k + 1):
@@ -52,7 +52,7 @@ def find_collatz_descents_accelerated(max_k=20, max_iter=36):
             if any(r % m_prev == r_prev for (m_prev, r_prev, _, _) in covered_prefixes):
                 continue
             a, b = mod, r
-            ops = []  # liste de tuples (kind, a0, b0, a1, b1) avec kind in ('E', 'O2')
+            ops = []
             total_steps = 0
             while total_steps < max_iter:
                 if a % 2 == 0 and b % 2 == 0:
@@ -61,7 +61,6 @@ def find_collatz_descents_accelerated(max_k=20, max_iter=36):
                     a, b = a1, b1
                     total_steps += 1
                 elif a % 2 == 0 and b % 2 == 1:
-                    # Deux étapes de Collatz d'un coup : (3n+1)/2
                     a1, b1 = (3 * a) // 2, (3 * b + 1) // 2
                     ops.append(('O2', a, b, a1, b1))
                     a, b = a1, b1
@@ -80,13 +79,13 @@ def find_collatz_descents_accelerated(max_k=20, max_iter=36):
 def generate_lean_file(filename="theorems/UltraHighCoverage.lean"):
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     es_pct = compute_es_coverage()
-    collatz_rules, collatz_pct = find_collatz_descents_accelerated(max_k=20, max_iter=36)
+    collatz_rules, collatz_pct = find_collatz_descents_accelerated(max_k=17, max_iter=30)
 
     lines = [
         "/-!",
         "  UltraHighCoverage.lean — Certification Ultra-Haute Couverture (v2.0.0)",
         f"  - Conjecture d'Erdos-Straus : {es_pct:.7f} % certifie (primes <= 199)",
-        f"  - Conjecture de Collatz     : {collatz_pct:.4f} % certifie (descente acceleree mod 2^20)",
+        f"  - Conjecture de Collatz     : {collatz_pct:.4f} % certifie (descente acceleree mod 2^17)",
         "  - Zero dependance externe, zero sorryAx.",
         "-/",
         "",
@@ -173,7 +172,7 @@ def generate_lean_file(filename="theorems/UltraHighCoverage.lean"):
 
     print(f"Génération v2.0.0 terminée : {filename}")
     print(f"  -> Erdős–Straus : {es_pct:.7f} % de couverture ({len(PRIMES_ES)} familles premières <= 199)")
-    print(f"  -> Collatz      : {collatz_pct:.4f} % de couverture ({len(collatz_rules)} classes primitives mod 2^20)")
+    print(f"  -> Collatz      : {collatz_pct:.4f} % de couverture ({len(collatz_rules)} classes primitives mod 2^17)")
 
 if __name__ == "__main__":
     generate_lean_file()
