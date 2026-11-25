@@ -96,7 +96,7 @@ def generate_lean_file(filename="theorems/UltraHighCoverage.lean"):
             f"    _ = (4 * {a} * {b} * {c}) * (k * k * k) := by ac_rfl",
             f"    _ = ({p} * ({b} * {c} + {a} * {c} + {a} * {b})) * (k * k * k) := by rw [hc]",
             f"    _ = ({p} * k) * (({b} * k) * ({c} * k) + ({a} * k) * ({c} * k) + ({a} * k) * ({b} * k)) := by",
-             "        rw [Nat.mul_add, Nat.mul_add, Nat.add_mul, Nat.add_mul]; ac_rfl",
+                      "        rw [Nat.mul_add, Nat.mul_add, Nat.add_mul, Nat.add_mul, Nat.mul_add, Nat.mul_add]; ac_rfl",
 
             ""
         ])
