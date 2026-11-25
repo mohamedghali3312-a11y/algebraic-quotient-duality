@@ -85,10 +85,9 @@ def generate_lean_file(filename="theorems/UltraHighCoverage.lean"):
         ""
     ]
 
+
     for p in PRIMES_ES:
         a, b, c = find_es_prime_witness(p)
-        lines.extend([
-            f"theorem erdosStrausPrimeDiv{p} (k : Nat) (hk : 1 <= k) : HasErdosStraus ({p} * k) := by",
         lines.extend([
             f"theorem erdosStrausPrimeDiv{p} (k : Nat) (hk : 1 <= k) : HasErdosStraus ({p} * k) := by",
             f"  refine ⟨{a} * k, {b} * k, {c} * k, by omega, by omega, by omega, ?_⟩",
