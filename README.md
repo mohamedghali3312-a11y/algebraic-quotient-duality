@@ -1,35 +1,36 @@
-# Algebraic Quotient Duality — Formalisation Lean 4 (`v1.5.0`)
+# Algebraic Quotient Duality — Certification Formelle en Lean 4 Pur (v1.6.0)
 
-[![Lean 4 Verification](https://github.com)](https://github.com)
+[![Lean 4 CI](https://github.com)](https://github.com)
 [![DOI](https://zenodo.org)](https://doi.org)
+[![ORCID](https://shields.io)](https://orcid.org)
 
-Formalisation constructive et 100 % certifiée en **Lean 4** (sans aucun `sorry`, vérifiée en continu par GitHub Actions `#93`) dans `theorems/UnifiedAlgebraicDuality.lean`.
+Architecture modulaire de preuve formelle écrite en **Lean 4 pur** (zéro dépendance externe, zéro `sorryAx`), dédiée à l'analyse des projections d'anneaux quotients, des cribles primoriels et aux bornes de couverture constructive sur les conjectures d'Erdős–Straus et de Collatz.
 
-**Auteur :** Mohamed Ghali ([ORCID 0009-0006-3364-5341](https://orcid.org))
+## Résultats Formels Certifiés
 
-## Résultats principaux (`v1.5.0`)
+| Module | Théorème principal | Couverture certifiée | Axiomes utilisés |
+| :--- | :--- | :--- | :--- |
+| `UnifiedAlgebraicDuality.lean` | `erdosStrausUnifiedCoverage` | **97,14 %** (1 632 / 1 680 classes mod 1 680) | `[propext, Quot.sound]` |
+| `UnifiedAlgebraicDuality.lean` | `collatzHighOrderDescent` | **90,23 %** (231 / 256 classes mod 256) | `[propext, Quot.sound]` |
+| `UltraHighCoverage.lean` | `erdosStrausPrimeDivCoverage` | **99,99991 %** (facteurs premiers $p \le 73$) | `[propext, Quot.sound]` |
+| `UltraHighCoverage.lean` | `collatzMod16384Eq*` | **> 97,5 %** (descente dyadique mod $2^{14}$) | `[propext, Quot.sound]` |
 
-| Théorème | Domaine | Couverture certifiée | Classes / Structures prouvées |
-| :--- | :--- | :---: | :--- |
-| `UnifiedAlgebraicDuality` (40 théorèmes) | Dualité algébrique des quotients | **100 %** | Structures modulaires et quotients |
-| `erdosStrausUnifiedCoverage` + `V14` + `V15` | Conjecture d'Erdős–Straus ($\frac{4}{n} = \frac{1}{x} + \frac{1}{y} + \frac{1}{z}$) | **99,01 %** | $\pmod{2, 4, 12, 24, 48, 120, 168}$ + premiers $5 \dots 47$ |
-| `collatzUnifiedDescent` + `collatzHighOrderDescent` | Conjecture de Collatz (descente dyadique) | **90,23 %** | $\pmod{2, 4, 16, 32, 128, 256}$ |
+## Architecture du Dépôt
 
-## Vérification locale
+- `theorems/UnifiedAlgebraicDuality.lean` : 40 théorèmes fondateurs sur les projections d'anneaux (`RingProj`), l'inversibilité modulaire, le théorème des restes chinois et les couvertures modulaires de base.
+- `scripts/generate_999999_lean.py` : Générateur déterministe produisant automatiquement les témoins rationnels constructifs $(a, b, c)$ et les descentes dyadiques pas à pas.
+- `.github/workflows/lean_verify.yml` : Pipeline d'intégration continue compilant et auditant automatiquement les axiomes (`#print axioms`) à chaque commit.
+
+## Reproductibilité
 
 ```bash
+python3 scripts/generate_999999_lean.py
 lean theorems/UnifiedAlgebraicDuality.lean
+lean theorems/UltraHighCoverage.lean
 ```
 
-## Citation
+## Références & Citation
 
-```bibtex
-@software{ghali2026duality,
-  author    = {Ghali, Mohamed},
-  title     = {Algebraic Quotient Duality: Formal Foundations and Certified Lean 4 Proofs},
-  version   = {v1.5.0},
-  year      = {2026},
-  publisher = {Zenodo},
-  doi       = {10.5281/zenodo.24424556}
-}
-```
+- **Auteur :** Mohamed Ghali — ORCID : `0009-0006-3364-5341`
+- **Archive Zenodo :** `10.5281/zenodo.24424556`
+- **Publications HAL :** `hal-05856178`, `hal-05860758`
