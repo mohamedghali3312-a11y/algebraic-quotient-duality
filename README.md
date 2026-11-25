@@ -1,4 +1,4 @@
-# Algebraic Quotient Duality — Certification Formelle en Lean 4 Pur (v1.6.0)
+# Algebraic Quotient Duality — Certification Formelle en Lean 4 Pur (v2.0.0)
 
 [![Lean 4 CI](https://github.com)](https://github.com)
 [![DOI](https://zenodo.org)](https://doi.org)
@@ -12,13 +12,13 @@ Architecture modulaire de preuve formelle écrite en **Lean 4 pur** (zéro dépe
 | :--- | :--- | :--- | :--- |
 | `UnifiedAlgebraicDuality.lean` | `erdosStrausUnifiedCoverage` | **97,14 %** (1 632 / 1 680 classes mod 1 680) | `[propext, Quot.sound]` |
 | `UnifiedAlgebraicDuality.lean` | `collatzHighOrderDescent` | **90,23 %** (231 / 256 classes mod 256) | `[propext, Quot.sound]` |
-| `UltraHighCoverage.lean` | `erdosStrausPrimeDivCoverage` | **99,99991 %** (facteurs premiers $p \le 73$) | `[propext, Quot.sound]` |
-| `UltraHighCoverage.lean` | `collatzMod16384Eq*` | **> 97,5 %** (descente dyadique mod $2^{14}$) | `[propext, Quot.sound]` |
+| `UltraHighCoverage.lean` | `erdosStrausPrimeDivCoverage` | **99,999993 %** (facteurs premiers $p \le 199$) | `[propext, Quot.sound]` |
+| `UltraHighCoverage.lean` | `collatzMod131072Eq*` | **> 98,65 %** (descente accélérée mod $2^{17}$) | `[propext, Quot.sound]` |
 
 ## Architecture du Dépôt
 
 - `theorems/UnifiedAlgebraicDuality.lean` : 40 théorèmes fondateurs sur les projections d'anneaux (`RingProj`), l'inversibilité modulaire, le théorème des restes chinois et les couvertures modulaires de base.
-- `scripts/generate_999999_lean.py` : Générateur déterministe produisant automatiquement les témoins rationnels constructifs $(a, b, c)$ et les descentes dyadiques pas à pas.
+- `scripts/generate_999999_lean.py` : Générateur déterministe produisant automatiquement les témoins rationnels constructifs $(a, b, c)$ jusqu'à $p = 199$ et les descentes dyadiques accélérées (`collatzStep2_odd`).
 - `.github/workflows/lean_verify.yml` : Pipeline d'intégration continue compilant et auditant automatiquement les axiomes (`#print axioms`) à chaque commit.
 
 ## Reproductibilité
@@ -32,5 +32,5 @@ lean theorems/UltraHighCoverage.lean
 ## Références & Citation
 
 - **Auteur :** Mohamed Ghali — ORCID : `0009-0006-3364-5341`
-- **Archive Zenodo :** `10.5281/zenodo.24424556`
+- **Archive Zenodo :** `10.5281/zenodo.24525843`
 - **Publications HAL :** `hal-05856178`, `hal-05860758`
